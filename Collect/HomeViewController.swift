@@ -23,6 +23,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     override func viewDidLoad() {
         super.viewDidLoad()
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        screenshotCollectionHome.delegate = self
+        screenshotCollectionHome.dataSource = self
     }
     
     func setStatusBarBackgroundColor(color: UIColor) {
@@ -52,6 +54,19 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
 
     @IBOutlet weak var screenshotCollectionHome: UICollectionView!
+    
+}
+
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "screenshotCell", for: indexPath)
+        return cell
+    }
+    
     
 }
 

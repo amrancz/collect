@@ -38,65 +38,49 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="x37-oM-v9Z">
-                                <rect key="frame" x="8" y="72" width="359" height="595"/>
-                                <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <viewLayoutGuide key="safeArea" id="jNo-ax-ezL"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gzR-EU-PZ5">
-                                    <size key="itemSize" width="50" height="50"/>
+                            <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="x37-oM-v9Z">
+                                <rect key="frame" x="6" y="72" width="363" height="595"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="0.0" sectionInsetReference="layoutMargins" id="gzR-EU-PZ5">
+                                    <size key="itemSize" width="119" height="211"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="1" minY="0.0" maxX="1" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="screenshotCell" id="90b-Ij-zFB">
-                                        <rect key="frame" x="0.0" y="0.0" width="117" height="208"/>
+                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="screenshotCell" id="90b-Ij-zFB">
+                                        <rect key="frame" x="9" y="8" width="119" height="211"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="117" height="208"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="119" height="211"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qZQ-GB-szy">
-                                                    <rect key="frame" x="0.0" y="0.0" width="117" height="208"/>
+                                                <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Amr-9q-k3b">
+                                                    <rect key="frame" x="0.0" y="0.0" width="119" height="211"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
-                                                        <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Amr-9q-k3b">
-                                                            <rect key="frame" x="0.0" y="0.0" width="117" height="208"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="screenshotExample" translatesAutoresizingMaskIntoConstraints="NO" id="F2x-wL-wCN">
+                                                            <rect key="frame" x="0.0" y="0.0" width="119" height="211"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="screenshotExample1" translatesAutoresizingMaskIntoConstraints="NO" id="F2x-wL-wCN">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="117" height="208"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                </imageView>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                    <integer key="value" value="5"/>
+                                                                    <integer key="value" value="10"/>
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
-                                                        </view>
+                                                        </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                             <integer key="value" value="5"/>
                                                         </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
-                                                            <real key="value" value="0.25"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
-                                                            <size key="value" width="0.0" height="2"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
-                                                            <integer key="value" value="5"/>
-                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <size key="customSize" width="117" height="208"/>
+                                        <size key="customSize" width="119" height="211"/>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -106,10 +90,10 @@
                             <constraint firstItem="DnS-pn-4P7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1ZW-PM-GPO"/>
                             <constraint firstItem="DnS-pn-4P7" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="6SZ-ct-zIp"/>
                             <constraint firstAttribute="bottom" secondItem="x37-oM-v9Z" secondAttribute="bottom" id="CFr-bM-2yf"/>
+                            <constraint firstItem="x37-oM-v9Z" firstAttribute="top" secondItem="DnS-pn-4P7" secondAttribute="bottom" constant="8" id="Dge-aN-JVi"/>
                             <constraint firstItem="DnS-pn-4P7" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="PtI-hj-dpz"/>
-                            <constraint firstItem="x37-oM-v9Z" firstAttribute="top" secondItem="DnS-pn-4P7" secondAttribute="bottom" constant="8" id="Ycm-qY-rlp"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="x37-oM-v9Z" secondAttribute="trailing" constant="8" id="nae-pK-OXf"/>
-                            <constraint firstItem="x37-oM-v9Z" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="pRU-OQ-knf"/>
+                            <constraint firstItem="x37-oM-v9Z" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="6" id="T2i-Y3-cHH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="x37-oM-v9Z" secondAttribute="trailing" constant="6" id="UX9-vZ-HAe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -125,6 +109,6 @@
     <resources>
         <image name="ic_add" width="24" height="24"/>
         <image name="ic_settings" width="24" height="24"/>
-        <image name="screenshotExample1" width="750" height="1334"/>
+        <image name="screenshotExample" width="750" height="1334"/>
     </resources>
 </document>
