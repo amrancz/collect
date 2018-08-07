@@ -7,16 +7,10 @@
 //
 
 import UIKit
+import Realm
 import RealmSwift
-
-class Screenshot: Object {
-    @objc dynamic var screenshotID = ""
-    let tags = List<Tag>()
-}
-
-class Tag: Object {
-    @objc dynamic var tagName = ""
-}
+import BSImagePicker
+import Photos
 
 class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
@@ -37,12 +31,20 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         // Dispose of any resources that can be recreated.
     }
     
+    // UIImagePicker to add screenshots
     @IBAction func addScreenshotButton(_ sender: Any) {
-        let screenshotPicker = UIImagePickerController()
-        screenshotPicker.allowsEditing = false
-        screenshotPicker.sourceType = .savedPhotosAlbum
-        screenshotPicker.delegate = self
-        present(screenshotPicker, animated: true, completion: nil)
+        let screenshotPicker = BSImagePickerViewController()
+        bs_presentImagePickerController(screenshotPicker, animated: true, select: { (asset: PHAsset) -> Void in
+            // User selected an asset.
+            // Do something with it, start upload perhaps?
+        }, deselect: { (asset: PHAsset) -> Void in
+            // User deselected an assets.
+            // Do something, cancel upload?
+        }, cancel: { (assets: [PHAsset]) -> Void in
+            // User cancelled. And this where the assets currently selected.
+        }, finish: { (assets: [PHAsset]) -> Void in
+            // User finished with these assets
+        }, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -57,9 +59,11 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
 }
 
+private var cellCount = 4
+
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return cellCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -67,7 +71,33 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return cell
     }
     
+    func emptyCollectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if (cellCount == 0) {
+            self.screenshotCollectionHome.setEmptyView("No screenshots")
+        } else {
+            self.screenshotCollectionHome.restore()
+        }
+        
+        return cellCount
+    }
     
+}
+
+extension UICollectionView {
+    func setEmptyView(_ emptyMessage: String) {
+        let messageCopy = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
+        messageCopy.text = emptyMessage
+        messageCopy.textColor = .black
+        messageCopy.textAlignment = .center;
+        messageCopy.font = UIFont(name: "Helvetica", size: 25)
+        messageCopy.sizeToFit()
+        
+        self.backgroundView = messageCopy
+    }
+    
+    func restore() {
+        self.backgroundView = nil
+    }
 }
 
 
