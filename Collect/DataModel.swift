@@ -12,11 +12,13 @@ import RealmSwift
 
 class Screenshot: Object {
     @objc dynamic var screenshotID = ""
-    @objc dynamic var screenshotFileName = ""
+    @objc dynamic var screenshotFileName: String = ""
     let tags = List<Tag>()
 }
+
 
 class Tag: Object {
     @objc dynamic var tagName = ""
     @objc dynamic var tagID = ""
+    let assignedTags = LinkingObjects(fromType: Screenshot.self, property: "tags")
 }

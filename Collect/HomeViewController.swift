@@ -43,23 +43,37 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         }, cancel: { (assets: [PHAsset]) -> Void in
             // User cancelled. And this where the assets currently selected.
         }, finish: { (assets: [PHAsset]) -> Void in
-            // User finished with these assets
+            let image = UIImage()
+            let fileManager = FileManager.default
+            let imageData = UIImagePNGRepresentation(image) as Data?
+            let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let uuid = UUID().uuidString
+            print (uuid)
+            print (documentsDirectory)
+            
+            let writePath = documentsDirectory.appendingPathComponent("\(uuid).png")
+            print (writePath)
+            
+            try! imageData?.write(to: writePath as URL, options: [.atomicWrite])
+            
+            let screenshot = Screenshot()
+            screenshot.screenshotID = uuid
+            screenshot.screenshotFileName = "\(uuid).png"
+            
+            let realm = try! Realm()
+            try! realm.write {
+                realm.add(screenshot)
+                print ("Screenshot added to Realm!")
+                print (screenshot)
+            }
         }, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        guard (info[UIImagePickerControllerEditedImage] as? UIImage) != nil else {
-            print("No image found")
-            return
-        }
     }
 
     @IBOutlet weak var screenshotCollectionHome: UICollectionView!
     
 }
 
-private var cellCount = 4
+private var cellCount = 2
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
