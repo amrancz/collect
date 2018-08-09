@@ -48,11 +48,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let imageData = UIImagePNGRepresentation(image) as Data?
             let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
             let uuid = UUID().uuidString
-            print (uuid)
-            print (documentsDirectory)
-            
             let writePath = documentsDirectory.appendingPathComponent("\(uuid).png")
-            print (writePath)
             
             try! imageData?.write(to: writePath as URL, options: [.atomicWrite])
             
@@ -63,8 +59,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let realm = try! Realm()
             try! realm.write {
                 realm.add(screenshot)
-                print ("Screenshot added to Realm!")
-                print (screenshot)
             }
         }, completion: nil)
     }
@@ -73,7 +67,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
 }
 
-private var cellCount = 2
+private var cellCount = 20
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -88,8 +82,10 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func emptyCollectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if (cellCount == 0) {
             self.screenshotCollectionHome.setEmptyView("No screenshots")
+            print("There is no content!")
         } else {
             self.screenshotCollectionHome.restore()
+            print("There is no content!")
         }
         
         return cellCount
@@ -106,11 +102,13 @@ extension UICollectionView {
         messageCopy.font = UIFont(name: "Helvetica", size: 25)
         messageCopy.sizeToFit()
         
+        
         self.backgroundView = messageCopy
     }
     
     func restore() {
         self.backgroundView = nil
+        print("There is content!")
     }
 }
 
