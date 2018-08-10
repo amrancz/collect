@@ -12,13 +12,14 @@ import RealmSwift
 import BSImagePicker
 import Photos
 
-class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         screenshotCollectionHome.delegate = self
         screenshotCollectionHome.dataSource = self
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
     func setStatusBarBackgroundColor(color: UIColor) {
@@ -34,7 +35,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     // UIImagePicker to add screenshots
     @IBAction func addScreenshotButton(_ sender: Any) {
         let screenshotPicker = BSImagePickerViewController()
-        bs_presentImagePickerController(screenshotPicker, animated: true, select: { (asset: PHAsset) -> Void in
+        bs_presentImagePickerController(screenshotPicker, animated: true,
+            select: { (asset: PHAsset) -> Void in
             // User selected an asset.
             // Do something with it, start upload perhaps?
         }, deselect: { (asset: PHAsset) -> Void in
@@ -43,73 +45,63 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         }, cancel: { (assets: [PHAsset]) -> Void in
             // User cancelled. And this where the assets currently selected.
         }, finish: { (assets: [PHAsset]) -> Void in
-            let image = UIImage()
-            let fileManager = FileManager.default
-            let imageData = UIImagePNGRepresentation(image) as Data?
-            let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let uuid = UUID().uuidString
-            let writePath = documentsDirectory.appendingPathComponent("\(uuid).png")
+            // Need to rewrite this in a way that works with "assets"". Fetch the localIdentifier, store it somehow (on select already?) and then save on finish. Or save the PHAsset to document directory
+            for asset in assets {
+                let manager = PHImageManager.default()
+                let option = PHImageRequestOptions()
+                var image = UIImage()
+                option.isSynchronous = true
+                manager.requestImage(for: asset, targetSize: CGSize(width: 100.0, height: 100.0), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
+                    image = result!
+                })
+                let imageData = UIImagePNGRepresentation(image) as Data?
+                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let uuid = UUID().uuidString
+                let screenshot = Screenshot()
+                let writePath = documentsDirectory.appendingPathComponent("\(uuid).png")
+                try! imageData?.write(to: writePath as URL, options: [.atomic])
+                screenshot.screenshotID = uuid
+                screenshot.screenshotFileName = "\(uuid).png"
+                let realm = try! Realm()
+                try! realm.write {
+                    realm.add(screenshot)
+                }
+            }
             
-            try! imageData?.write(to: writePath as URL, options: [.atomicWrite])
-            
-            let screenshot = Screenshot()
-            screenshot.screenshotID = uuid
-            screenshot.screenshotFileName = "\(uuid).png"
-            
-            let realm = try! Realm()
-            try! realm.write {
-                realm.add(screenshot)
+            DispatchQueue.main.async{
+                self.screenshotCollectionHome.reloadData()
             }
         }, completion: nil)
     }
 
     @IBOutlet weak var screenshotCollectionHome: UICollectionView!
     
-}
-
-private var cellCount = 20
-
-extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func getDocumentsDirectory() -> URL {
+        let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return documentsDirectoryURL
+    }
+    
+    func screenshotFile(_ fileName: String) -> String {
+        let screenshotURL = getDocumentsDirectory().appendingPathComponent(fileName)
+        return screenshotURL.path
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cellCount
+        let realm = try! Realm()
+        let screenshots = realm.objects(Screenshot.self)
+        return screenshots.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "screenshotCell", for: indexPath)
+        let cell = screenshotCollectionHome.dequeueReusableCell(withReuseIdentifier: "screenshotCell", for: indexPath)
+        let realm = try! Realm()
+        let screenshots = realm.objects(Screenshot.self)[indexPath.row]
+        let screenshotURL: URL = getDocumentsDirectory().appendingPathComponent(screenshots.screenshotFileName)
+        print(screenshotURL)
+        print(screenshots.screenshotFileName)
         return cell
     }
     
-    func emptyCollectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if (cellCount == 0) {
-            self.screenshotCollectionHome.setEmptyView("No screenshots")
-            print("There is no content!")
-        } else {
-            self.screenshotCollectionHome.restore()
-            print("There is no content!")
-        }
-        
-        return cellCount
-    }
-    
-}
-
-extension UICollectionView {
-    func setEmptyView(_ emptyMessage: String) {
-        let messageCopy = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
-        messageCopy.text = emptyMessage
-        messageCopy.textColor = .black
-        messageCopy.textAlignment = .center;
-        messageCopy.font = UIFont(name: "Helvetica", size: 25)
-        messageCopy.sizeToFit()
-        
-        
-        self.backgroundView = messageCopy
-    }
-    
-    func restore() {
-        self.backgroundView = nil
-        print("There is content!")
-    }
 }
 
 
