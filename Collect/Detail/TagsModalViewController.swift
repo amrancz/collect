@@ -1,5 +1,5 @@
 //
-//  TagsModalView.swift
+//  TagsModalViewController.swift
 //  Collect
 //
 //  Created by Adam Amran on 25/08/2018.
@@ -36,8 +36,9 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
         self.tagsModalCollectionView.dataSource = self
         self.tagsModalCollectionView.allowsMultipleSelection = true
         self.sizingCell = (tagCellNib.instantiate(withOwner: nil, options: nil)as NSArray).firstObject as! TagCell?
+        print(passedScreenshotUUID as Any)
         print(usedTags().count)
-        print(unusedTags().count)
+        print(unusedTags())
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -106,14 +107,12 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
         var fittingSize = UIView.layoutFittingCompressedSize
         fittingSize.height = 37
         let cellSize = self.sizingCell?.systemLayoutSizeFitting(fittingSize)
-        print(cellSize!)
         return cellSize!
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: TagCell = tagsModalCollectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
         self.configureCell(cell, forIndexPath: indexPath)
-        print(indexPath)
         return cell
     }
     

@@ -118,6 +118,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         screenshotImage = cell.imageView.image
         screenshotUUID = screenshots.screenshotID
         performSegue(withIdentifier: "HomeToDetail", sender: indexPath)
+        print(screenshotUUID as Any)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
