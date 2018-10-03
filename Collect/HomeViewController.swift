@@ -7,19 +7,35 @@
 //
 
 import UIKit
+import Foundation
 import Realm
 import RealmSwift
 import BSImagePicker
 import Photos
 
 class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
-
+    
+    var screenshotImage: UIImage!
+    var screenshotUUID: String?
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         screenshotCollectionHome.delegate = self
         screenshotCollectionHome.dataSource = self
+        self.searchButton.layer.cornerRadius = 25
+        self.searchButton.layer.shadowRadius = 10
+        self.searchButton.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.4)
+        self.searchButton.layer.shadowOpacity = 0.6
+        self.searchButton.layer.masksToBounds = false
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCollection(_:)), name: Notification.Name(rawValue: "reloadCollection"), object: nil)
         print(Realm.Configuration.defaultConfiguration.fileURL!)
+
+    }
+    
+    @objc func refreshCollection(_ notification:Notification) {
+        self.screenshotCollectionHome.reloadData()
     }
     
     func setStatusBarBackgroundColor(color: UIColor) {
@@ -37,24 +53,18 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         let screenshotPicker = BSImagePickerViewController()
         bs_presentImagePickerController(screenshotPicker, animated: true,
             select: { (asset: PHAsset) -> Void in
-            // User selected an asset.
-            // Do something with it, start upload perhaps?
         }, deselect: { (asset: PHAsset) -> Void in
-            // User deselected an assets.
-            // Do something, cancel upload?
         }, cancel: { (assets: [PHAsset]) -> Void in
-            // User cancelled. And this where the assets currently selected.
         }, finish: { (assets: [PHAsset]) -> Void in
-            // Need to rewrite this in a way that works with "assets"". Fetch the localIdentifier, store it somehow (on select already?) and then save on finish. Or save the PHAsset to document directory
             for asset in assets {
                 let manager = PHImageManager.default()
                 let option = PHImageRequestOptions()
                 var image = UIImage()
                 option.isSynchronous = true
-                manager.requestImage(for: asset, targetSize: CGSize(width: 100.0, height: 100.0), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
+                manager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
                     image = result!
                 })
-                let imageData = UIImagePNGRepresentation(image) as Data?
+                let imageData = image.pngData() as Data?
                 let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
                 let uuid = UUID().uuidString
                 let screenshot = Screenshot()
@@ -67,23 +77,19 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
                     realm.add(screenshot)
                 }
             }
-            
             DispatchQueue.main.async{
                 self.screenshotCollectionHome.reloadData()
             }
         }, completion: nil)
     }
-
+    
+    @IBOutlet weak var searchButton: UIButton!
+    
     @IBOutlet weak var screenshotCollectionHome: UICollectionView!
     
     func getDocumentsDirectory() -> URL {
         let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         return documentsDirectoryURL
-    }
-    
-    func screenshotFile(_ fileName: String) -> String {
-        let screenshotURL = getDocumentsDirectory().appendingPathComponent(fileName)
-        return screenshotURL.path
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -92,16 +98,35 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         return screenshots.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = screenshotCollectionHome.dequeueReusableCell(withReuseIdentifier: "screenshotCell", for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt cellForRowAtIndexPath: IndexPath) -> UICollectionViewCell {
+        let cell = screenshotCollectionHome.dequeueReusableCell(withReuseIdentifier: "screenshotCell", for: cellForRowAtIndexPath) as! ScreenshotCell
         let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)[indexPath.row]
-        let screenshotURL: URL = getDocumentsDirectory().appendingPathComponent(screenshots.screenshotFileName)
-        print(screenshotURL)
-        print(screenshots.screenshotFileName)
+        let screenshots = realm.objects(Screenshot.self)[cellForRowAtIndexPath.row]
+        let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshots.screenshotFileName)
+        let screenshotPath = screenshotURL.path
+        if let imageData = UIImage(contentsOfFile: screenshotPath) {
+            cell.imageView.contentMode = .scaleAspectFit
+            cell.imageView.image = imageData
+        }
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = screenshotCollectionHome.cellForItem(at: indexPath) as! ScreenshotCell
+        let realm = try! Realm()
+        let screenshots = realm.objects(Screenshot.self)[indexPath.row]
+        screenshotImage = cell.imageView.image
+        screenshotUUID = screenshots.screenshotID
+        performSegue(withIdentifier: "HomeToDetail", sender: indexPath)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "HomeToDetail" {
+            let toDetailViewController = segue.destination as! DetailViewController
+            toDetailViewController.passedImage = screenshotImage
+            toDetailViewController.passedScreenshotUUID = screenshotUUID
+        }
+    }
+    
 }
-
 
