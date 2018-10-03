@@ -25,15 +25,23 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     var screenshotImage: UIImage!
     var screenshotUUID: String?
     
+    var passedScreenshotIDs: [String] = []
+    
+    func searchedScreenshots() -> Results<Screenshot> {
+        let realm = try! Realm()
+        let screenshots = realm.objects(Screenshot.self).filter("screenshotID IN %@", passedScreenshotIDs)
+        return screenshots
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         screenshotCollectionHome.delegate = self
         screenshotCollectionHome.dataSource = self
         
+        print(passedScreenshotIDs)
+        print(searchedScreenshots().count)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCollection(_:)), name: Notification.Name(rawValue: "reloadCollection"), object: nil)
-        print(Realm.Configuration.defaultConfiguration.fileURL!)
-        
     }
     
     @objc func refreshCollection(_ notification:Notification) {
@@ -58,15 +66,12 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)
-        return screenshots.count
+        return searchedScreenshots().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt cellForRowAtIndexPath: IndexPath) -> UICollectionViewCell {
         let cell = screenshotCollectionHome.dequeueReusableCell(withReuseIdentifier: "screenshotCell", for: cellForRowAtIndexPath) as! ScreenshotCell
-        let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)[cellForRowAtIndexPath.row]
+        let screenshots = searchedScreenshots()[cellForRowAtIndexPath.row]
         let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshots.screenshotFileName)
         let screenshotPath = screenshotURL.path
         if let imageData = UIImage(contentsOfFile: screenshotPath) {
@@ -78,16 +83,16 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = screenshotCollectionHome.cellForItem(at: indexPath) as! ScreenshotCell
-        let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)[indexPath.row]
+        let screenshots = searchedScreenshots()[indexPath.row]
         screenshotImage = cell.imageView.image
         screenshotUUID = screenshots.screenshotID
-        performSegue(withIdentifier: "HomeToDetail", sender: indexPath)
+        performSegue(withIdentifier: "SearchResultsToDetail", sender: indexPath)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "HomeToDetail" {
-            let toDetailViewController = segue.destination as! DetailViewController
+        if segue.identifier == "SearchResultsToDetail" {
+            let toDetailNavigationController = segue.destination as! UINavigationController
+            let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedImage = screenshotImage
             toDetailViewController.passedScreenshotUUID = screenshotUUID
         }

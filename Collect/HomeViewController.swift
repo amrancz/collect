@@ -122,7 +122,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "HomeToDetail" {
-            let toDetailViewController = segue.destination as! DetailViewController
+            let toDetailNavigationController = segue.destination as! UINavigationController
+            let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedImage = screenshotImage
             toDetailViewController.passedScreenshotUUID = screenshotUUID
         }

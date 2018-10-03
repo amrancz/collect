@@ -57,6 +57,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        self.navigationController?.isNavigationBarHidden = true
         screenshotDetail.image = passedImage
         screenshotDetail.contentMode = .scaleAspectFit
     }

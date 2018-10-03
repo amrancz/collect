@@ -35,11 +35,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
             cancelButton.isEnabled = true
         }
+        self.navigationItem.titleView = self.searchBar
         searchBar.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.becomeFirstResponder()
+        self.searchButton.layer.cornerRadius = 25
         
         let tagCellNib = UINib(nibName: "TagCell", bundle: nil)
+//        self.navigationController?.isNavigationBarHidden = true
         self.searchTagsCollectionView.register(tagCellNib, forCellWithReuseIdentifier: reuseIdentifier)
         self.searchTagsCollectionView.delegate = self
         self.searchTagsCollectionView.dataSource = self
@@ -185,6 +188,17 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         }
         self.setupSearchButton()
         print(self.selectedScreenshotsIDs.count)
+    }
+    
+    @IBAction func searchButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "SearchToResults", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SearchToResults" {
+            let toSearchResultsViewController = segue.destination as! SearchResultsViewController
+            toSearchResultsViewController.passedScreenshotIDs = selectedScreenshotsIDs
+        }
     }
     
 }
