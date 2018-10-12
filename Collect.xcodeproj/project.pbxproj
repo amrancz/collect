@@ -16,6 +16,7 @@
 		6654FEBC2117857400E0D4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6654FEBB2117857400E0D4BA /* Assets.xcassets */; };
 		6654FEBF2117857400E0D4BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6654FEBD2117857400E0D4BA /* LaunchScreen.storyboard */; };
 		6675B2A321313ADC00CB9A92 /* TagsModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6675B2A221313ADC00CB9A92 /* TagsModalViewController.swift */; };
+		66838751217101BD00817AA7 /* DetailViewControllerDraggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66838750217101BD00817AA7 /* DetailViewControllerDraggable.swift */; };
 		669F8BE7213FF4A900187F2A /* TagsModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F8BE6213FF4A900187F2A /* TagsModalPresentationController.swift */; };
 		669F8BE9213FF50600187F2A /* TagsModalTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F8BE8213FF50600187F2A /* TagsModalTransitioningDelegate.swift */; };
 		669F8BEB213FF56B00187F2A /* TagsModalPresentationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F8BEA213FF56B00187F2A /* TagsModalPresentationAnimator.swift */; };
@@ -440,6 +441,7 @@
 		6654FEBE2117857400E0D4BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6654FEC02117857400E0D4BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6675B2A221313ADC00CB9A92 /* TagsModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsModalViewController.swift; sourceTree = "<group>"; };
+		66838750217101BD00817AA7 /* DetailViewControllerDraggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewControllerDraggable.swift; sourceTree = "<group>"; };
 		669F8BE6213FF4A900187F2A /* TagsModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsModalPresentationController.swift; sourceTree = "<group>"; };
 		669F8BE8213FF50600187F2A /* TagsModalTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsModalTransitioningDelegate.swift; sourceTree = "<group>"; };
 		669F8BEA213FF56B00187F2A /* TagsModalPresentationAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsModalPresentationAnimator.swift; sourceTree = "<group>"; };
@@ -1192,6 +1194,7 @@
 				669F8BE5213FF49100187F2A /* TagsModalPresentation */,
 				66F71B9D213FEB56005B57B9 /* StoryboardReference.swift */,
 				6611E72021414B560069D04C /* TagsFlowLayout.swift */,
+				66838750217101BD00817AA7 /* DetailViewControllerDraggable.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -1363,6 +1366,7 @@
 				6675B2A321313ADC00CB9A92 /* TagsModalViewController.swift in Sources */,
 				6654FEB52117856F00E0D4BA /* AppDelegate.swift in Sources */,
 				66E6D0362133CFD1003D9603 /* TagCell.swift in Sources */,
+				66838751217101BD00817AA7 /* DetailViewControllerDraggable.swift in Sources */,
 				66C1892A2146EACE00110BA0 /* SearchViewController.swift in Sources */,
 				66D5D75F2126A63500DD5B4F /* ManageTagsTableViewController.swift in Sources */,
 				66C938C22119DC9B0052250A /* DataModel.swift in Sources */,

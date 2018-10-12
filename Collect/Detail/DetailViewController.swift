@@ -16,7 +16,7 @@ private struct MainStoryboard: StoryboardType {
     static let viewController = StoryboardReference<MainStoryboard, TagsModalViewController>(id: "TagsModalViewControllerID")
 }
 
-class DetailViewController: UIViewController, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate {
+class DetailViewController: DetailViewControllerDraggable, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate {
     
     var passedImage: UIImage!
     var passedScreenshotUUID: String?
@@ -29,24 +29,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         self.dismiss(animated: true, completion: nil)
     }
 
-    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
-    
-    @IBAction func gestureHandler(_ sender: UIPanGestureRecognizer) {
-        let touchPoint = sender.location(in: self.view.window)
-        if sender.state == UIGestureRecognizer.State.began {
-            initialTouchPoint = touchPoint
-        } else if sender.state == UIGestureRecognizer.State.changed {
-            if touchPoint.y - initialTouchPoint.y > 0  {
-                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
-            }
-        } else if sender.state == UIGestureRecognizer.State.ended || sender.state == UIGestureRecognizer.State.cancelled {
-            if touchPoint.y - initialTouchPoint.y > 200 {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
-            }
-        }
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

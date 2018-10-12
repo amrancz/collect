@@ -270,9 +270,6 @@
                             <constraint firstItem="dEc-p9-TIN" firstAttribute="top" secondItem="Cw4-1C-lvy" secondAttribute="top" id="zC3-dU-ezf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fop-Pk-BjP"/>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="9I9-5D-6PI" appends="YES" id="nfs-bj-992"/>
-                        </connections>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="hVT-Wu-oDo"/>
@@ -282,11 +279,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FCt-YS-bCr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="9I9-5D-6PI">
-                    <connections>
-                        <action selector="gestureHandler:" destination="B7Y-Lw-HeT" id="OBL-hU-d3G"/>
-                    </connections>
-                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1984.8" y="37.331334332833585"/>
         </scene>
