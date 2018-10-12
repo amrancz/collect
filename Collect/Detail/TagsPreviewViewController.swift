@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Realm
+import RealmSwift
 
 
 private struct MainStoryboard: StoryboardType {
@@ -23,9 +24,11 @@ class TagsPreviewViewController: UIViewController {
     
     var passedScreenshotUUID: String?
     
+    @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet var tagsPreview: UIView!
     
     @IBOutlet weak var addTags: UIButton!
+    
     @IBAction func openTags(_ sender: Any) {
         viewController.transitioningDelegate = self.transitionDelegate
         viewController.modalPresentationStyle = .custom
@@ -44,5 +47,24 @@ class TagsPreviewViewController: UIViewController {
         tagsPreview.layer.cornerRadius = 10
         tagsPreview.layer.masksToBounds = false
         tagsPreview.clipsToBounds = false
+    }
+    
+    @IBAction func deleteScreenshot(_ sender: Any) {
+        let deleteAction = UIAlertAction(title: "Delete screenshot", style: .destructive){ (action:UIAlertAction!) in
+            let realm = try! Realm()
+            let screenshot = realm.objects(Screenshot.self).filter("screenshotID = '\(self.passedScreenshotUUID!)'")
+            try! realm.write {
+                realm.delete(screenshot)
+            }
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
+            self.dismiss(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
+        }
+        let deleteScreenshotAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        deleteScreenshotAlert.addAction(deleteAction)
+        deleteScreenshotAlert.addAction(cancelAction)
+        self.present(deleteScreenshotAlert, animated: true) {
+        }
     }
 }

@@ -222,27 +222,10 @@
                                     <constraint firstAttribute="trailing" secondItem="03h-uT-LU2" secondAttribute="trailing" id="XK3-7x-WxP"/>
                                     <constraint firstItem="03h-uT-LU2" firstAttribute="centerX" secondItem="dEc-p9-TIN" secondAttribute="centerX" id="y0Q-5k-S3b"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="VAN-5S-uil" appends="YES" id="ZWm-ve-53K"/>
+                                </connections>
                             </scrollView>
-                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgD-Iw-rtC">
-                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <viewLayoutGuide key="safeArea" id="Z2o-Qp-rQj"/>
-                                <items>
-                                    <navigationItem id="WMz-xI-FNw">
-                                        <barButtonItem key="backBarButtonItem" title="Back" id="fwi-wa-k6r"/>
-                                        <barButtonItem key="leftBarButtonItem" image="ic_close" id="YGZ-Iu-GSl">
-                                            <connections>
-                                                <action selector="closeButtonTapped:" destination="B7Y-Lw-HeT" id="a1e-5n-jPq"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Delete" image="ic_delete" id="9i0-fm-0Hx">
-                                            <connections>
-                                                <action selector="deleteScreenshot:" destination="B7Y-Lw-HeT" id="ygp-uH-6ET"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ugh-UC-flL">
                                 <rect key="frame" x="0.0" y="571" width="375" height="52"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -261,12 +244,8 @@
                             <constraint firstItem="fop-Pk-BjP" firstAttribute="bottom" secondItem="ugh-UC-flL" secondAttribute="bottom" id="N4C-8N-ExR"/>
                             <constraint firstAttribute="bottom" secondItem="dEc-p9-TIN" secondAttribute="bottom" id="TsS-Mf-KMd"/>
                             <constraint firstItem="dEc-p9-TIN" firstAttribute="leading" secondItem="Cw4-1C-lvy" secondAttribute="leading" id="V6s-2P-Ow4"/>
-                            <constraint firstItem="sgD-Iw-rtC" firstAttribute="leading" secondItem="Cw4-1C-lvy" secondAttribute="leading" id="Xya-J2-Aln"/>
                             <constraint firstItem="dEc-p9-TIN" firstAttribute="trailing" secondItem="Cw4-1C-lvy" secondAttribute="trailing" id="fwK-yL-Y81"/>
-                            <constraint firstItem="sgD-Iw-rtC" firstAttribute="top" secondItem="fop-Pk-BjP" secondAttribute="top" id="hyV-SI-FjY"/>
-                            <constraint firstItem="sgD-Iw-rtC" firstAttribute="leading" secondItem="fop-Pk-BjP" secondAttribute="leading" id="sh2-J5-5WJ"/>
                             <constraint firstItem="ugh-UC-flL" firstAttribute="trailing" secondItem="fop-Pk-BjP" secondAttribute="trailing" id="tPP-Ri-6AK"/>
-                            <constraint firstAttribute="trailing" secondItem="sgD-Iw-rtC" secondAttribute="trailing" id="u2G-KP-fDG"/>
                             <constraint firstItem="dEc-p9-TIN" firstAttribute="top" secondItem="Cw4-1C-lvy" secondAttribute="top" id="zC3-dU-ezf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fop-Pk-BjP"/>
@@ -276,9 +255,16 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="screenshotDetail" destination="03h-uT-LU2" id="8Ph-I1-NLh"/>
+                        <outlet property="scrollView" destination="dEc-p9-TIN" id="b3I-DK-VFl"/>
+                        <outlet property="toolbarContainer" destination="ugh-UC-flL" id="JbZ-Br-HaW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FCt-YS-bCr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="VAN-5S-uil">
+                    <connections>
+                        <action selector="hideUI" destination="B7Y-Lw-HeT" id="DvH-NP-bKD"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1984.8" y="37.331334332833585"/>
         </scene>
@@ -520,23 +506,38 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9KO-Li-RQe">
-                                <rect key="frame" x="155" y="11" width="64" height="30"/>
-                                <state key="normal" title="Add Tags"/>
+                                <rect key="frame" x="20" y="9.5" width="76" height="33"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <state key="normal" title="Add Tags">
+                                    <color key="titleColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="openTags:" destination="3nQ-lk-ef3" eventType="touchUpInside" id="CpA-S1-aR4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G2a-9X-gyL">
+                                <rect key="frame" x="331" y="14" width="24" height="24"/>
+                                <color key="tintColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="ic_delete">
+                                    <color key="titleColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteScreenshot:" destination="3nQ-lk-ef3" eventType="touchUpInside" id="IV5-Bn-f4N"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="yiO-5H-12n" firstAttribute="trailing" secondItem="9KO-Li-RQe" secondAttribute="trailing" constant="156" id="fFU-8p-E6X"/>
-                            <constraint firstItem="9KO-Li-RQe" firstAttribute="leading" secondItem="yiO-5H-12n" secondAttribute="leading" constant="155" id="g8H-kr-nCP"/>
+                            <constraint firstItem="G2a-9X-gyL" firstAttribute="centerY" secondItem="gaD-CA-zpD" secondAttribute="centerY" id="M1A-wq-vFS"/>
+                            <constraint firstItem="9KO-Li-RQe" firstAttribute="leading" secondItem="yiO-5H-12n" secondAttribute="leading" constant="20" id="g8H-kr-nCP"/>
                             <constraint firstItem="9KO-Li-RQe" firstAttribute="centerY" secondItem="gaD-CA-zpD" secondAttribute="centerY" id="oIE-EZ-JNf"/>
+                            <constraint firstItem="yiO-5H-12n" firstAttribute="trailing" secondItem="G2a-9X-gyL" secondAttribute="trailing" constant="20" id="qhV-h5-FHQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="yiO-5H-12n"/>
                     </view>
                     <connections>
                         <outlet property="addTags" destination="9KO-Li-RQe" id="cAf-mT-T8E"/>
+                        <outlet property="deleteButton" destination="G2a-9X-gyL" id="aW6-vk-sRj"/>
                         <outlet property="tagsPreview" destination="gaD-CA-zpD" id="QC2-lt-y2r"/>
                     </connections>
                 </viewController>

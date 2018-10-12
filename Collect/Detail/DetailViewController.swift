@@ -22,14 +22,10 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var passedScreenshotUUID: String?
     
     var tagsPreviewViewController: TagsPreviewViewController?
+    @IBOutlet weak var toolbarContainer: UIView!
     
     @IBOutlet weak var screenshotDetail: UIImageView!
-    
-    @IBAction func closeButtonTapped(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-
-
+    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,29 +35,34 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         screenshotDetail.contentMode = .scaleAspectFit
     }
     
-    
-    @IBAction func deleteScreenshot(_ sender: Any) {
-        let deleteAction = UIAlertAction(title: "Delete screenshot", style: .destructive){ (action:UIAlertAction!) in
-            let realm = try! Realm()
-            let screenshot = realm.objects(Screenshot.self).filter("screenshotID = '\(self.passedScreenshotUUID!)'")
-            try! realm.write {
-                realm.delete(screenshot)
-            }
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
-            self.dismiss(animated: true)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
-        }
-        let deleteScreenshotAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        deleteScreenshotAlert.addAction(deleteAction)
-        deleteScreenshotAlert.addAction(cancelAction)
-        self.present(deleteScreenshotAlert, animated: true) {
-        }
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+    }
+    
+    var visible: Bool = true
+    
+    @IBAction func hideUI() {
+        visible = !visible
+        if visible == true {
+            UIView.animate(withDuration: 0.2) {
+                self.view.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                self.toolbarContainer.isHidden = true
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        } else {
+            UIView.animate(withDuration: 0.2) {
+                self.view.layer.backgroundColor = #colorLiteral(red: 0.9497935176, green: 0.9562532306, blue: 0.9594267011, alpha: 1)
+                self.toolbarContainer.isHidden = false
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
+    }
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return UIStatusBarAnimation.slide
+    }
+    override var prefersStatusBarHidden: Bool {
+        return !visible
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -76,30 +77,5 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         statusBar.backgroundColor = color
     }
     
-    //MARK: Swipe down to dismiss
-
-//    var gestureRecognizer: UIPanGestureRecognizer!
-//
-//    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
-//
-//    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
-//        let touchPoint = sender.location(in: self.view.window)
-//
-//        if sender.state == UIGestureRecognizer.State.began {
-//            initialTouchPoint = touchPoint
-//        } else if sender.state == UIGestureRecognizer.State.changed {
-//            if touchPoint.y - initialTouchPoint.y > 0  {
-//                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
-//            }
-//        } else if sender.state == UIGestureRecognizer.State.ended || sender.state == UIGestureRecognizer.State.cancelled {
-//            if touchPoint.y - initialTouchPoint.y > 100 {
-//                self.dismiss(animated: true, completion: nil)
-//            } else {
-//                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
-//            }
-//        }
-//    }
-
-
 }
 
