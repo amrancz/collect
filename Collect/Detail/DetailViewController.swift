@@ -28,6 +28,34 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     @IBAction func closeButtonTapped(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
+
+    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
+    
+    @IBAction func gestureHandler(_ sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: self.view.window)
+        if sender.state == UIGestureRecognizer.State.began {
+            initialTouchPoint = touchPoint
+        } else if sender.state == UIGestureRecognizer.State.changed {
+            if touchPoint.y - initialTouchPoint.y > 0  {
+                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
+            }
+        } else if sender.state == UIGestureRecognizer.State.ended || sender.state == UIGestureRecognizer.State.cancelled {
+            if touchPoint.y - initialTouchPoint.y > 200 {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
+            }
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        self.navigationController?.isNavigationBarHidden = true
+        screenshotDetail.image = passedImage
+        screenshotDetail.contentMode = .scaleAspectFit
+    }
+    
     
     @IBAction func deleteScreenshot(_ sender: Any) {
         let deleteAction = UIAlertAction(title: "Delete screenshot", style: .destructive){ (action:UIAlertAction!) in
@@ -48,30 +76,46 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         }
     }
     
-    
-    func setStatusBarBackgroundColor(color: UIColor) {
-        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
-        statusBar.backgroundColor = color
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-        self.navigationController?.isNavigationBarHidden = true
-        screenshotDetail.image = passedImage
-        screenshotDetail.contentMode = .scaleAspectFit
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detailToTagsPreview" {
             tagsPreviewViewController = segue.destination as? TagsPreviewViewController
             tagsPreviewViewController?.passedScreenshotUUID = passedScreenshotUUID
         }
     }
+    
+    func setStatusBarBackgroundColor(color: UIColor) {
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = color
+    }
+    
+    //MARK: Swipe down to dismiss
+
+//    var gestureRecognizer: UIPanGestureRecognizer!
+//
+//    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
+//
+//    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
+//        let touchPoint = sender.location(in: self.view.window)
+//
+//        if sender.state == UIGestureRecognizer.State.began {
+//            initialTouchPoint = touchPoint
+//        } else if sender.state == UIGestureRecognizer.State.changed {
+//            if touchPoint.y - initialTouchPoint.y > 0  {
+//                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
+//            }
+//        } else if sender.state == UIGestureRecognizer.State.ended || sender.state == UIGestureRecognizer.State.cancelled {
+//            if touchPoint.y - initialTouchPoint.y > 100 {
+//                self.dismiss(animated: true, completion: nil)
+//            } else {
+//                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
+//            }
+//        }
+//    }
 
 
 }

@@ -10,16 +10,36 @@ import Foundation
 import UIKit
 import RealmSwift
 import Realm
+import TBEmptyDataSet
 
 class ManageTagsTableViewController: UITableViewController {
     
     @IBOutlet var tagsTableView: UITableView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.emptyDataSetDataSource = self
+        tableView.emptyDataSetDelegate = self
+        styleTableView()
+    }
     
     func tagsCount() -> Int {
         let realm = try! Realm()
         let tags = realm.objects(Tag.self)
         let tagsCount = tags.count
         return tagsCount
+    }
+    
+    func styleTableView() {
+        if self.tableView.numberOfRows(inSection: 0) == 0 {
+            self.tableView.separatorStyle = .none
+            self.tableView.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.9450980392, blue: 0.9490196078, alpha: 1)
+            self.editButton.isEnabled = false
+        } else {
+            self.tableView.separatorStyle = .singleLine
+            self.tableView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            self.editButton.isEnabled = true
+        }
     }
         
     @IBAction func addTag(_ sender: Any) {
@@ -58,6 +78,7 @@ class ManageTagsTableViewController: UITableViewController {
         let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
         let tagInfo = tags[indexPath.row]
         cell.textLabel?.text = tagInfo.tagName
+        styleTableView()
         return cell
     }
     
@@ -72,18 +93,46 @@ class ManageTagsTableViewController: UITableViewController {
             self.editButton.title = "Edit"
         }
     }
-
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        self.tableView.deselectRow(at: indexPath, animated: true)
+        self.tableView.beginUpdates()
         let realm = try! Realm()
         let tag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
         try! realm.write {
             realm.delete(tag)
             realm.refresh()
         }
-        print ("Updated tagCount is \(tagsCount())")
-        self.tableView.reloadData()
-        // TO FIX: Deleting row with animation throws NSInternalInconsistencyException – invalid number of rows
-        // tableView.deleteRows(at: [indexPath], with: .fade)
+        self.tableView.deleteRows(at: [indexPath], with: .fade)
+        self.tableView.endUpdates()
+        styleTableView()
+    }
+}
+
+extension ManageTagsTableViewController: TBEmptyDataSetDataSource, TBEmptyDataSetDelegate {
+    func emptyDataSetShouldDisplay(in scrollView: UIScrollView) -> Bool {
+        if tableView.numberOfRows(inSection: 0) == 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func titleForEmptyDataSet(in scrollView: UIScrollView) -> NSAttributedString? {
+        var attributes: [NSAttributedString.Key: Any]?
+        attributes = [.font: UIFont.systemFont(ofSize: 22, weight: UIFont.Weight.heavy),
+                      .foregroundColor: UIColor.black]
+        return NSAttributedString(string: "You have no tags", attributes: attributes)
+    }
+    
+    func descriptionForEmptyDataSet(in scrollView: UIScrollView) -> NSAttributedString? {
+        var attributes: [NSAttributedString.Key: Any]?
+        attributes = [.font: UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.regular),
+                      .foregroundColor: UIColor.gray]
+        return NSAttributedString(string: "Go ahead and add some.", attributes: attributes)
+    }
+    
+    func verticalOffsetForEmptyDataSet(in scrollView: UIScrollView) -> CGFloat {
+        return -40
     }
 }

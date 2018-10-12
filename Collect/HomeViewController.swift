@@ -12,8 +12,9 @@ import Realm
 import RealmSwift
 import BSImagePicker
 import Photos
+import TBEmptyDataSet
 
-class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource{
     
     var screenshotImage: UIImage!
     var screenshotUUID: String?
@@ -23,6 +24,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         screenshotCollectionHome.delegate = self
         screenshotCollectionHome.dataSource = self
+        screenshotCollectionHome.emptyDataSetDelegate = self
+        screenshotCollectionHome.emptyDataSetDataSource = self
         self.searchButton.layer.cornerRadius = 25
         self.searchButton.layer.shadowRadius = 10
         self.searchButton.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.4)
@@ -130,5 +133,38 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         }
     }
     
+}
+
+extension HomeViewController: TBEmptyDataSetDataSource, TBEmptyDataSetDelegate {
+    func emptyDataSetShouldDisplay(in scrollView: UIScrollView) -> Bool {
+        if screenshotCollectionHome.numberOfItems(inSection: 0) == 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func imageForEmptyDataSet(in scrollView: UIScrollView) -> UIImage? {
+        return UIImage(named: "mainEmptyImage")
+    }
+    
+    func titleForEmptyDataSet(in scrollView: UIScrollView) -> NSAttributedString? {
+        var attributes: [NSAttributedString.Key: Any]?
+        attributes = [.font: UIFont.systemFont(ofSize: 22, weight: UIFont.Weight.heavy),
+                      .foregroundColor: UIColor.black]
+        return NSAttributedString(string: "Something’s missing", attributes: attributes)
+    }
+    
+    func descriptionForEmptyDataSet(in scrollView: UIScrollView) -> NSAttributedString? {
+        var attributes: [NSAttributedString.Key: Any]?
+        attributes = [.font: UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.regular),
+                      .foregroundColor: UIColor.gray]
+        return NSAttributedString(string: "Go ahead and import some screenshots.", attributes: attributes)
+    }
+    
+    func verticalSpacesForEmptyDataSet(in scrollView: UIScrollView) -> [CGFloat] {
+        return [30,10]
+    }
+
 }
 

@@ -29,7 +29,7 @@ final class TagsModalPresentationController: UIPresentationController {
     }
 
     override var frameOfPresentedViewInContainerView: CGRect {
-        return CGRect(x: 0, y: UIScreen.main.bounds.height - 332, width: 375, height: 332)
+        return CGRect(x: 0, y: UIScreen.main.bounds.height - 332, width: UIScreen.main.bounds.width, height: 332)
     }
     
     override func dismissalTransitionWillBegin() {
@@ -59,7 +59,6 @@ final class TagsModalPresentationController: UIPresentationController {
     override func containerViewDidLayoutSubviews() {
         super.containerViewDidLayoutSubviews()
         self.presentedView?.frame = frameOfPresentedViewInContainerView
-        print(presentedView?.frame as Any)
         blurEffectView.frame = containerView!.bounds
     }
 }

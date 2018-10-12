@@ -8,6 +8,7 @@ target 'Collect' do
   use_frameworks!
   pod "BSImagePicker", "~> 2.8"
   pod 'RealmSwift'
+  pod 'TBEmptyDataSet'
   # Pods for Collect
 
 end

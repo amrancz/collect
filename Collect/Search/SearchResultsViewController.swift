@@ -38,6 +38,12 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         screenshotCollectionHome.delegate = self
         screenshotCollectionHome.dataSource = self
+        if searchedScreenshots().count == 1 {
+            self.navigationItem.title = "1 result"
+        } else {
+            self.navigationItem.title = "\(searchedScreenshots().count) results"
+        }
+        self.navigationItem.backBarButtonItem?.title = "Search"
         
         print(passedScreenshotIDs)
         print(searchedScreenshots().count)

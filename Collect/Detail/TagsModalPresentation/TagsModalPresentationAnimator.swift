@@ -34,7 +34,6 @@ class TagsModalPresentationAnimator: NSObject, UIViewControllerAnimatedTransitio
             finished in transitionContext.completeTransition(finished)
         })
         
-        print ("tags modal presented")
     }
     
 }

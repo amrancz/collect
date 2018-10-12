@@ -13,17 +13,16 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TagsModalViewController" customModule="Collect" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="tagCellIdentifier" id="UFR-pf-xsK" customClass="TagCell" customModule="Collect" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="166" height="37"/>
+            <rect key="frame" x="0.0" y="0.0" width="80" height="37"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="166" height="37"/>
+                <rect key="frame" x="0.0" y="0.0" width="80" height="37"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label verifyAmbiguity="ignoreSizes" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="146" placeholderIntrinsicHeight="37" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BV0-cM-F5R">
-                        <rect key="frame" x="10" y="8" width="146" height="21"/>
+                    <label verifyAmbiguity="ignoreSizes" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BV0-cM-F5R">
+                        <rect key="frame" x="10" y="8" width="60" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="304" id="GMm-JA-TdA"/>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="gMh-Of-Zcr"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="343" id="GMm-JA-TdA"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
@@ -32,18 +31,18 @@
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="AEo-Ds-HRr" firstAttribute="trailing" secondItem="BV0-cM-F5R" secondAttribute="trailing" constant="10" id="Bl5-ze-4Es"/>
-                <constraint firstItem="BV0-cM-F5R" firstAttribute="leading" secondItem="AEo-Ds-HRr" secondAttribute="leading" constant="10" id="dhC-NE-bha"/>
-                <constraint firstItem="AEo-Ds-HRr" firstAttribute="bottom" secondItem="BV0-cM-F5R" secondAttribute="bottom" constant="8" id="m8U-BJ-swR"/>
-                <constraint firstItem="BV0-cM-F5R" firstAttribute="top" secondItem="AEo-Ds-HRr" secondAttribute="top" constant="8" id="xFc-xh-2Uh"/>
+                <constraint firstAttribute="trailing" secondItem="BV0-cM-F5R" secondAttribute="trailing" constant="10" id="3Da-Jl-9e0"/>
+                <constraint firstAttribute="bottom" secondItem="BV0-cM-F5R" secondAttribute="bottom" constant="8" id="KAN-aa-z0V"/>
+                <constraint firstItem="BV0-cM-F5R" firstAttribute="top" secondItem="UFR-pf-xsK" secondAttribute="top" constant="8" id="jR6-9z-w0M"/>
+                <constraint firstItem="BV0-cM-F5R" firstAttribute="leading" secondItem="UFR-pf-xsK" secondAttribute="leading" constant="10" id="pmX-FW-yeV"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="AEo-Ds-HRr"/>
-            <size key="customSize" width="166" height="37"/>
+            <size key="customSize" width="80" height="37"/>
             <connections>
                 <outlet property="tagCellLabel" destination="BV0-cM-F5R" id="Ww6-yy-vAB"/>
                 <outlet property="tagCellMaxWidth" destination="GMm-JA-TdA" id="NM2-3p-Aca"/>
             </connections>
-            <point key="canvasLocation" x="29" y="188"/>
+            <point key="canvasLocation" x="-40" y="187.55622188905548"/>
         </collectionViewCell>
     </objects>
 </document>

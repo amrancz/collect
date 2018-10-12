@@ -19,7 +19,8 @@ class TagCell: UICollectionViewCell {
         self.layer.borderWidth = 1
         self.layer.borderColor = #colorLiteral(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
         self.layer.cornerRadius = 5
-        self.tagCellMaxWidth.constant = UIScreen.main.bounds.width - 8 * 2 - 8 * 2
+//        self.tagCellMaxWidth.constant = UIScreen.main.bounds.width - 8 * 2 - 8 * 2
+//        self.translatesAutoresizingMaskIntoConstraints = false
     }
     
     override var isSelected: Bool{

@@ -18,7 +18,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var searchTagsCollectionView: UICollectionView!
     @IBOutlet weak var searchButton: UIButton!
-    @IBOutlet weak var searchButtonBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchButtonContainer: UIView!
     
     var selectedScreenshotsIDs: [String] = []
     
@@ -31,15 +31,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     var sizingCell: TagCell?
     
     override func viewDidLoad() {
-        searchBar.becomeFirstResponder()
-        if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
-            cancelButton.isEnabled = true
-        }
+        self.searchBar.resignFirstResponder()
+        self.keepCancelButtonActive()
         self.navigationItem.titleView = self.searchBar
-        searchBar.delegate = self
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.becomeFirstResponder()
-        self.searchButton.layer.cornerRadius = 25
+        self.searchBar.delegate = self
+        self.searchController.hidesNavigationBarDuringPresentation = false
+        self.searchController.searchBar.becomeFirstResponder()
+        self.searchBar.returnKeyType = .done
         
         let tagCellNib = UINib(nibName: "TagCell", bundle: nil)
 //        self.navigationController?.isNavigationBarHidden = true
@@ -52,58 +50,83 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         self.searchButton.isEnabled = false
         if self.searchButton.isEnabled == false {
             self.searchButton.layer.backgroundColor = #colorLiteral(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+            self.searchButtonContainer.layer.backgroundColor = #colorLiteral(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+
         }
         self.searchButton.setTitle("No results", for: .disabled)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            let keyboardSize = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
-            let isKeyboardShowing = notification.name == UIResponder.keyboardWillShowNotification
-            self.searchButtonBottomConstraint.constant = isKeyboardShowing ? -(keyboardSize?.height)! : 0
-            
-            UIView.animate(withDuration: 0.3, animations: { () -> Void in
-                self.searchBar.layoutIfNeeded()
-            })
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        self.searchBar.endEditing(true)
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.searchButton.frame.origin.y != UIScreen.main.bounds.height - self.searchButton.frame.height {
-                self.searchButton.frame.origin.y = self.searchButton.frame.origin.y - keyboardSize.height
-            }
-        }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.searchBar.endEditing(true)
+        self.searchBar.resignFirstResponder()
+        self.keepCancelButtonActive()
     }
+    
+    
+//    @objc func keyboardWillShow(notification: NSNotification) {
+//        if let userInfo = notification.userInfo {
+//            UIView.animate(withDuration: 0.3, animations: { () -> Void in
+//                self.searchBar.layoutIfNeeded()
+//            })
+//        }
+//    }
+//
+//    @objc func keyboardWillHide(notification: NSNotification) {
+//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//            if self.searchButton.frame.origin.y != UIScreen.main.bounds.height - self.searchButton.frame.height {
+//                self.searchButton.frame.origin.y = self.searchButton.frame.origin.y - keyboardSize.height
+//            }
+//        }
+//    }
     
     func updateSearchResults(for searchController: UISearchController) {
         return print("hic sunt leones")
     }
     
     func resultsCount() -> Int {
-        let count = self.selectedScreenshotsIDs.count
+        let array = self.selectedScreenshotsIDs
+        let count = NSSet(array: array).count
         return count
     }
     
     func setupSearchButton() {
-        if self.selectedScreenshotsIDs.count == 0 {
+        if resultsCount() == 0 {
             self.searchButton.setTitle("No results", for: .disabled)
             self.searchButton.isEnabled = false
             self.searchButton.layer.backgroundColor = #colorLiteral(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
-        } else {
+            self.searchButtonContainer.layer.backgroundColor = #colorLiteral(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+        } else if resultsCount() == 1 {
+            self.searchButton.setTitle("Show \(self.resultsCount()) result", for: .normal)
+            self.searchButton.isEnabled = true
+            self.searchButton.layer.backgroundColor = #colorLiteral(red: 0, green: 0.4, blue: 0.8274509804, alpha: 1)
+            self.searchButtonContainer.layer.backgroundColor = #colorLiteral(red: 0, green: 0.4, blue: 0.8274509804, alpha: 1)
+        }  else {
             self.searchButton.setTitle("Show \(self.resultsCount()) results", for: .normal)
             self.searchButton.isEnabled = true
             self.searchButton.layer.backgroundColor = #colorLiteral(red: 0, green: 0.4, blue: 0.8274509804, alpha: 1)
+            self.searchButtonContainer.layer.backgroundColor = #colorLiteral(red: 0, green: 0.4, blue: 0.8274509804, alpha: 1)
+
         }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.searchBar.text = ""
         self.dismiss(animated: true, completion: nil)
-        searchBar.becomeFirstResponder()
+        searchBar.resignFirstResponder()
+        self.keepCancelButtonActive()
+    }
+
+    func keepCancelButtonActive() {
+        if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
+            cancelButton.isEnabled = true
+        }
     }
     
     func tagsCount() -> Int {
@@ -132,11 +155,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     }
     
     func widthOfLabel(text:String, font:UIFont) -> CGFloat {
-        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: CGFloat.greatestFiniteMagnitude))
-        label.font = font
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+        label.font = UIFont.systemFont(ofSize: 17)
         label.text = text
         label.sizeToFit()
-        return label.frame.width
+        return label.frame.width+32
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -149,10 +172,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         self.configureCell(self.sizingCell!, forIndexPath: indexPath)
+        self.configureCell(self.sizingCell!, forIndexPath: indexPath)
         var fittingSize = UIView.layoutFittingCompressedSize
+        fittingSize.width = widthOfLabel(text: (self.sizingCell?.tagCellLabel.text)!, font: UIFont.systemFont(ofSize: 17))
         fittingSize.height = 37
-        let cellSize = self.sizingCell?.systemLayoutSizeFitting(fittingSize)
-        return cellSize!
+        let cellSize = CGSize.init(width: fittingSize.width, height: fittingSize.height)
+        return cellSize
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -171,23 +196,23 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
 //    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedTag = realm.objects(Tag.self)[indexPath.row]
+        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
         let screenshots = realm.objects(Screenshot.self).filter("ANY tags == %@", selectedTag)
         for screenshot in screenshots {
             self.selectedScreenshotsIDs.append(screenshot.screenshotID)
         }
         self.setupSearchButton()
-        print(self.selectedScreenshotsIDs.count)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let selectedTag = realm.objects(Tag.self)[indexPath.row]
+        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
         let screenshots = realm.objects(Screenshot.self).filter("ANY tags == %@", selectedTag)
         for screenshot in screenshots {
-            self.selectedScreenshotsIDs.removeAll { $0 == "\(screenshot.screenshotID)"}
+            if let index = self.selectedScreenshotsIDs.index(where: { $0 == "\(screenshot.screenshotID)"}) {
+                self.selectedScreenshotsIDs.remove(at: index)
+            }
         }
         self.setupSearchButton()
-        print(self.selectedScreenshotsIDs.count)
     }
     
     @IBAction func searchButtonTapped(_ sender: Any) {

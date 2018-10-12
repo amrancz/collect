@@ -36,9 +36,6 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
         self.tagsModalCollectionView.dataSource = self
         self.tagsModalCollectionView.allowsMultipleSelection = true
         self.sizingCell = (tagCellNib.instantiate(withOwner: nil, options: nil)as NSArray).firstObject as! TagCell?
-        print(passedScreenshotUUID as Any)
-        print(usedTags().count)
-        print(unusedTags())
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -62,13 +59,13 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
         return tagsCount
     }
     
-//    func widthOfLabel(text:String, font:UIFont) -> CGFloat {
-//        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: CGFloat.greatestFiniteMagnitude))
-//        label.font = font
-//        label.text = text
-//        label.sizeToFit()
-//        return label.frame.width
-//    }
+    func widthOfLabel(text:String) -> CGFloat {
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+        label.font = UIFont.systemFont(ofSize: 17)
+        label.text = text
+        label.sizeToFit()
+        return label.frame.width+32
+    }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
@@ -97,17 +94,15 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
             tagsModalCollectionView.deselectItem(at: indexPath, animated: false)
             cell.tagCellLabel.text = tagInfo.tagName
         }
-//        let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
-//        let tagInfo = tags[indexPath.row]
-//        cell.tagCellLabel.text = tagInfo.tagName
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         self.configureCell(self.sizingCell!, forIndexPath: indexPath)
         var fittingSize = UIView.layoutFittingCompressedSize
+        fittingSize.width = widthOfLabel(text: (self.sizingCell?.tagCellLabel.text)!)
         fittingSize.height = 37
-        let cellSize = self.sizingCell?.systemLayoutSizeFitting(fittingSize)
-        return cellSize!
+        let cellSize = CGSize.init(width: fittingSize.width, height: fittingSize.height)
+        return cellSize
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -118,70 +113,30 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell: TagCell = tagsModalCollectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
-        if indexPath.section == 0 {
-            let selectedTag = usedTags().sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
-            if let screenshotToSaveTo = self.selectedScreenshot.first {
-                try! realm.write {
-                    screenshotToSaveTo.tags.append(selectedTag)
-                }
+        let selectedTag = unusedTags().sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
+        if let screenshotToSaveTo = self.selectedScreenshot.first {
+            try! realm.write {
+                screenshotToSaveTo.tags.append(selectedTag)
             }
-            cell.isSelected = true
-            tagsModalCollectionView.reloadData()
-
-        } else {
-            let selectedTag = unusedTags().sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
-            if let screenshotToSaveTo = self.selectedScreenshot.first {
-                try! realm.write {
-                    screenshotToSaveTo.tags.append(selectedTag)
-                }
-            }
-            cell.isSelected = true
-            tagsModalCollectionView.reloadData()
-
         }
-//        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
-//        if let screenshotToSaveTo = self.selectedScreenshot.first {
-//            try! realm.write {
-//                screenshotToSaveTo.tags.append(selectedTag)
-//            }
-//        }
-//        cell.isSelected = true
+        cell.isSelected = true
+        tagsModalCollectionView.reloadData()
+
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell: TagCell = tagsModalCollectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
-        if indexPath.section == 0 {
-            let selectedTag = usedTags().sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
-            let screenshot = selectedScreenshot.first
-            try! realm.write {
-                if let index = screenshot?.tags.index(of: selectedTag) {
-                    screenshot?.tags.remove(at: index)
-                }
+        let selectedTag = usedTags().sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
+        let screenshot = selectedScreenshot.first
+        try! realm.write {
+            if let index = screenshot?.tags.index(of: selectedTag) {
+                screenshot?.tags.remove(at: index)
             }
-            cell.isSelected = false
-            tagsModalCollectionView.reloadData()
-
-        } else {
-            let selectedTag = unusedTags().sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
-            let screenshot = selectedScreenshot.first
-            try! realm.write {
-                if let index = screenshot?.tags.index(of: selectedTag) {
-                    screenshot?.tags.remove(at: index)
-                }
-            }
-            cell.isSelected = false
-            tagsModalCollectionView.reloadData()
-
         }
-//        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
-//        let screenshot = selectedScreenshot.first
-//        try! realm.write {
-//            if let index = screenshot?.tags.index(of: selectedTag) {
-//                screenshot?.tags.remove(at: index)
-//            }
-//        }
-//        cell.isSelected = false
+        cell.isSelected = false
+        tagsModalCollectionView.reloadData()
     }
+    
     @IBAction func addTag(_ sender: Any) {
         let addTagAlertController = UIAlertController(title: "Add Tag", message: "Name this new tag", preferredStyle: .alert)
         addTagAlertController.addTextField { (_ textField: UITextField) -> Void in
@@ -199,7 +154,6 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
             let screenshotToSaveTo = self.selectedScreenshot.first
             try! realm.write {
                 realm.add(tag, update: true)
-                print (tag.tagName)
                 screenshotToSaveTo?.tags.append(tag)
             }
             self.tagsModalCollectionView.reloadData()
