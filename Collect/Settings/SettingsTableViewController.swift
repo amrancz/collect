@@ -14,4 +14,5 @@ class SettingsTableViewController: UITableViewController {
     @IBAction func closeScreenshot(_ sender: Any) {
         self.dismiss(animated: true)
     }
+    
 }

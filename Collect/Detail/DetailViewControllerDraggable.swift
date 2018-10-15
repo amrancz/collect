@@ -21,6 +21,11 @@ class DetailViewControllerDraggable: UIViewController {
         view.addGestureRecognizer(panGestureRecognizer!)
     }
     
+    func setStatusBarBackgroundColor(color: UIColor) {
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = color
+    }
+    
     @objc func gestureHandler(_ sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: view)
         
@@ -34,6 +39,7 @@ class DetailViewControllerDraggable: UIViewController {
             
             if velocity.y >= 1500 {
                 UIView.animate(withDuration: 0.3, animations: {
+                    self.setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
                     self.view.frame.origin = CGPoint(x: self.view.frame.origin.x, y: self.view.frame.size.height)
                 }, completion: { (isCompleted) in
                     if isCompleted {
@@ -48,4 +54,3 @@ class DetailViewControllerDraggable: UIViewController {
         }
     }
 }
-
