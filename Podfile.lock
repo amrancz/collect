@@ -4,6 +4,9 @@ PODS:
     - BSGridCollectionViewLayout (= 1.2.2)
     - BSImageView (= 1.0.2)
   - BSImageView (1.0.2)
+  - ImageSlideshow (1.7.0):
+    - ImageSlideshow/Core (= 1.7.0)
+  - ImageSlideshow/Core (1.7.0)
   - Realm (3.11.0):
     - Realm/Headers (= 3.11.0)
   - Realm/Headers (3.11.0)
@@ -13,6 +16,7 @@ PODS:
 
 DEPENDENCIES:
   - BSImagePicker (~> 2.8)
+  - ImageSlideshow (~> 1.6)
   - RealmSwift
   - TBEmptyDataSet
 
@@ -21,6 +25,7 @@ SPEC REPOS:
     - BSGridCollectionViewLayout
     - BSImagePicker
     - BSImageView
+    - ImageSlideshow
     - Realm
     - RealmSwift
     - TBEmptyDataSet
@@ -29,10 +34,11 @@ SPEC CHECKSUMS:
   BSGridCollectionViewLayout: 3e6f23b3a2b4f0ca9afae09ca01389d1057f7b32
   BSImagePicker: 553707de1adaad42eac252e0b84d20dbdba83fe9
   BSImageView: ab22ff8cae61f1ae17a3c9efeeb216af3cf84a09
+  ImageSlideshow: f8eec5e37a980f60923b585ff23b0e140fd24018
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
   RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
   TBEmptyDataSet: eabe80f13fe620156068d4c3e2ce56227042c96a
 
-PODFILE CHECKSUM: 25f59e23bdd77ad3074c99d0655479156f4ad31e
+PODFILE CHECKSUM: 9617048aef44987cf3c2cd95c1bbbb541bd8debe
 
 COCOAPODS: 1.5.2

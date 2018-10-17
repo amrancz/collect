@@ -9,6 +9,7 @@ target 'Collect' do
   pod "BSImagePicker", "~> 2.8"
   pod 'RealmSwift'
   pod 'TBEmptyDataSet'
+  pod 'ImageSlideshow', '~> 1.6'
   # Pods for Collect
 
 end

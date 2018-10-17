@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Realm
 import RealmSwift
+import ImageSlideshow
 
 private struct MainStoryboard: StoryboardType {
     static let name = "Main"
@@ -21,28 +22,43 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var passedImage: UIImage!
     var passedScreenshotUUID: String?
     var passedScreenshotPosition: Int?
+    var passedScreenshotImageSet: [UIImage?] = []
+    
+    //MARK: Setup slideshow
+    @IBOutlet var screenshotSlideshow: ImageSlideshow!
     
     @IBOutlet weak var toolbarContainer: UIView!
     
     @IBOutlet weak var screenshotDetail: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    var slider: UIPageControl = UIPageControl(frame: CGRect.init(x: 0, y: 0, width: 375, height: 667))
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         screenshotDetail.image = passedImage
         screenshotDetail.contentMode = .scaleAspectFit
+        
         self.navigationController?.isNavigationBarHidden = true
         self.modalPresentationCapturesStatusBarAppearance = true
+        
+        var slideshowSource: [ImageSource] = []
+        for image in passedScreenshotImageSet {
+            let img = image
+            slideshowSource.append(ImageSource(image:img!))
+        }
+        
+        print(slideshowSource)
+        
+//        screenshotSlideshow.setImageInputs(slideshowSource)
+        scrollView.isHidden = true
+        print(passedScreenshotImageSet)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
     }
-    
     
     //MARK: Toggle UI on tap
     

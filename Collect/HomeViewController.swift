@@ -19,6 +19,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     var screenshotImage: UIImage!
     var screenshotUUID: String?
     var screenshotPosition: Int?
+    var screenshotImageSet: [UIImage?] = []
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,6 +90,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     @IBOutlet weak var searchButton: UIButton!
     
+    //MARK: Configure collectionView
+    
     @IBOutlet weak var screenshotCollectionHome: UICollectionView!
     
     func getDocumentsDirectory() -> URL {
@@ -111,6 +114,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         if let imageData = UIImage(contentsOfFile: screenshotPath) {
             cell.imageView.contentMode = .scaleAspectFit
             cell.imageView.image = imageData
+            screenshotImageSet.append(imageData)
         }
         return cell
     }
@@ -131,6 +135,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedImage = screenshotImage
             toDetailViewController.passedScreenshotUUID = screenshotUUID
+            toDetailViewController.passedScreenshotImageSet = screenshotImageSet
             toDetailViewController.passedScreenshotPosition = screenshotPosition
         }
     }
