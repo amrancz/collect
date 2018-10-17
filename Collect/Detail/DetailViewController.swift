@@ -50,19 +50,24 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         return .slide
     }
     
+    var originalToolBarPosition: CGPoint?
+    
     @IBAction func hideUI() {
+        originalToolBarPosition = self.toolbarContainer.center
         if visible == true {
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
                 self.visible = false
                 self.view.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-                self.toolbarContainer.isHidden = true
+//                self.toolbarContainer.isHidden = true
+                self.toolbarContainer.frame.origin = CGPoint(x: 0, y: self.view.layer.bounds.height )
                 self.setNeedsStatusBarAppearanceUpdate()
             }, completion: nil)
         } else {
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
                 self.visible = true
                 self.view.layer.backgroundColor = #colorLiteral(red: 0.9497935176, green: 0.9562532306, blue: 0.9594267011, alpha: 1)
-                self.toolbarContainer.isHidden = false
+                self.toolbarContainer.frame.origin = CGPoint(x: 0, y: self.view.layer.bounds.height - self.toolbarContainer.layer.bounds.height)
+//                self.toolbarContainer.isHidden = false
                 self.setNeedsStatusBarAppearanceUpdate()
             }, completion: nil)
         }
