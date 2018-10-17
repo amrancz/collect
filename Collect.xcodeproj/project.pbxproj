@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0E7DF1051A0E71BE7F9F21AA /* Pods_Collect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89E9F15EACC5FB047C884C20 /* Pods_Collect.framework */; };
 		6611E72121414B560069D04C /* TagsFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6611E72021414B560069D04C /* TagsFlowLayout.swift */; };
-		6625F07B2139034E00E34EB1 /* TagsPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6625F07A2139034E00E34EB1 /* TagsPreviewViewController.swift */; };
 		6654FEB52117856F00E0D4BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6654FEB42117856F00E0D4BA /* AppDelegate.swift */; };
 		6654FEB72117857000E0D4BA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6654FEB62117857000E0D4BA /* HomeViewController.swift */; };
 		6654FEBA2117857000E0D4BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6654FEB82117857000E0D4BA /* Main.storyboard */; };
@@ -34,7 +33,6 @@
 
 /* Begin PBXFileReference section */
 		6611E72021414B560069D04C /* TagsFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsFlowLayout.swift; sourceTree = "<group>"; };
-		6625F07A2139034E00E34EB1 /* TagsPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsPreviewViewController.swift; sourceTree = "<group>"; };
 		664B8C6E211C924700B325FB /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		664B8C70211C924700B325FB /* RealmConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmConfiguration.swift; sourceTree = "<group>"; };
 		664B8C71211C924700B325FB /* Realm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realm.swift; sourceTree = "<group>"; };
@@ -1189,7 +1187,6 @@
 			children = (
 				668AA84E214253AF007EF56A /* TagCell */,
 				66DE45B0211DBDBE00702A11 /* DetailViewController.swift */,
-				6625F07A2139034E00E34EB1 /* TagsPreviewViewController.swift */,
 				6675B2A221313ADC00CB9A92 /* TagsModalViewController.swift */,
 				669F8BE5213FF49100187F2A /* TagsModalPresentation */,
 				66F71B9D213FEB56005B57B9 /* StoryboardReference.swift */,
@@ -1355,7 +1352,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6625F07B2139034E00E34EB1 /* TagsPreviewViewController.swift in Sources */,
 				66AB6D95216494BE009D5446 /* SearchResultsViewController.swift in Sources */,
 				6654FEB72117857000E0D4BA /* HomeViewController.swift in Sources */,
 				66DE45B1211DBDBE00702A11 /* DetailViewController.swift in Sources */,

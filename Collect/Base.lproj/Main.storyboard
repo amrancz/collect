@@ -226,76 +226,75 @@
                                     <outletCollection property="gestureRecognizers" destination="VAN-5S-uil" appends="YES" id="ZWm-ve-53K"/>
                                 </connections>
                             </scrollView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-CA-zpD">
-                                <rect key="frame" x="0.0" y="563" width="375" height="52"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mGe-4Y-RY5">
+                                <rect key="frame" x="0.0" y="571" width="375" height="96"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9KO-Li-RQe">
-                                        <rect key="frame" x="20" y="9.5" width="76" height="33"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                        <state key="normal" title="Add Tags">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="openTags:" destination="3nQ-lk-ef3" eventType="touchUpInside" id="CpA-S1-aR4"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G2a-9X-gyL">
-                                        <rect key="frame" x="331" y="14" width="24" height="24"/>
-                                        <color key="tintColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" image="ic_delete">
-                                            <color key="titleColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="deleteScreenshot:" destination="3nQ-lk-ef3" eventType="touchUpInside" id="IV5-Bn-f4N"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jQn-iE-6VH" userLabel="Share Button">
-                                        <rect key="frame" x="291" y="14" width="20" height="24"/>
-                                        <color key="tintColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" image="ic_share">
-                                            <color key="titleColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="shareScreenshot:" destination="3nQ-lk-ef3" eventType="touchUpInside" id="Kbr-r1-aZ1"/>
-                                        </connections>
-                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-CA-zpD">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9KO-Li-RQe">
+                                                <rect key="frame" x="20" y="9.5" width="76" height="33"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <state key="normal" title="Add Tags">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="openTags:" destination="B7Y-Lw-HeT" eventType="touchUpInside" id="NGI-jw-V2W"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G2a-9X-gyL">
+                                                <rect key="frame" x="331" y="14" width="24" height="24"/>
+                                                <color key="tintColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" image="ic_delete">
+                                                    <color key="titleColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="deleteScreenshot:" destination="B7Y-Lw-HeT" eventType="touchUpInside" id="dar-yZ-0iH"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jQn-iE-6VH" userLabel="Share Button">
+                                                <rect key="frame" x="291" y="14" width="20" height="24"/>
+                                                <color key="tintColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" image="ic_share">
+                                                    <color key="titleColor" red="0.0" green="0.40000000000000002" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="shareScreenshot:" destination="B7Y-Lw-HeT" eventType="touchUpInside" id="Pxa-1t-32r"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="jQn-iE-6VH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9KO-Li-RQe" secondAttribute="trailing" constant="8" symbolic="YES" id="Kn2-kE-Iqe"/>
+                                            <constraint firstItem="G2a-9X-gyL" firstAttribute="leading" secondItem="jQn-iE-6VH" secondAttribute="trailing" constant="20" id="LPL-gQ-l42"/>
+                                            <constraint firstItem="G2a-9X-gyL" firstAttribute="centerY" secondItem="gaD-CA-zpD" secondAttribute="centerY" id="M1A-wq-vFS"/>
+                                            <constraint firstItem="jQn-iE-6VH" firstAttribute="centerY" secondItem="gaD-CA-zpD" secondAttribute="centerY" id="Ua5-An-pVY"/>
+                                            <constraint firstAttribute="height" constant="52" id="cIT-gH-eYV"/>
+                                            <constraint firstItem="9KO-Li-RQe" firstAttribute="leading" secondItem="yiO-5H-12n" secondAttribute="leading" constant="20" id="g8H-kr-nCP"/>
+                                            <constraint firstItem="9KO-Li-RQe" firstAttribute="centerY" secondItem="gaD-CA-zpD" secondAttribute="centerY" id="oIE-EZ-JNf"/>
+                                            <constraint firstItem="yiO-5H-12n" firstAttribute="trailing" secondItem="G2a-9X-gyL" secondAttribute="trailing" constant="20" id="qhV-h5-FHQ"/>
+                                        </constraints>
+                                        <viewLayoutGuide key="safeArea" id="yiO-5H-12n"/>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="jQn-iE-6VH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9KO-Li-RQe" secondAttribute="trailing" constant="8" symbolic="YES" id="Kn2-kE-Iqe"/>
-                                    <constraint firstItem="G2a-9X-gyL" firstAttribute="leading" secondItem="jQn-iE-6VH" secondAttribute="trailing" constant="20" id="LPL-gQ-l42"/>
-                                    <constraint firstItem="G2a-9X-gyL" firstAttribute="centerY" secondItem="gaD-CA-zpD" secondAttribute="centerY" id="M1A-wq-vFS"/>
-                                    <constraint firstItem="jQn-iE-6VH" firstAttribute="centerY" secondItem="gaD-CA-zpD" secondAttribute="centerY" id="Ua5-An-pVY"/>
-                                    <constraint firstAttribute="height" constant="52" id="cIT-gH-eYV"/>
-                                    <constraint firstItem="9KO-Li-RQe" firstAttribute="leading" secondItem="yiO-5H-12n" secondAttribute="leading" constant="20" id="g8H-kr-nCP"/>
-                                    <constraint firstItem="9KO-Li-RQe" firstAttribute="centerY" secondItem="gaD-CA-zpD" secondAttribute="centerY" id="oIE-EZ-JNf"/>
-                                    <constraint firstItem="yiO-5H-12n" firstAttribute="trailing" secondItem="G2a-9X-gyL" secondAttribute="trailing" constant="20" id="qhV-h5-FHQ"/>
+                                    <constraint firstItem="gaD-CA-zpD" firstAttribute="top" secondItem="uZS-0W-mHY" secondAttribute="top" id="MJ9-P4-OSC"/>
+                                    <constraint firstItem="uZS-0W-mHY" firstAttribute="bottom" secondItem="gaD-CA-zpD" secondAttribute="bottom" id="c6D-ot-KC4"/>
+                                    <constraint firstItem="gaD-CA-zpD" firstAttribute="leading" secondItem="uZS-0W-mHY" secondAttribute="leading" id="hSQ-gZ-rVg"/>
+                                    <constraint firstItem="uZS-0W-mHY" firstAttribute="trailing" secondItem="gaD-CA-zpD" secondAttribute="trailing" id="tp9-5A-SqM"/>
                                 </constraints>
-                                <viewLayoutGuide key="safeArea" id="yiO-5H-12n"/>
+                                <viewLayoutGuide key="safeArea" id="uZS-0W-mHY"/>
                             </view>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ugh-UC-flL">
-                                <rect key="frame" x="0.0" y="615" width="375" height="52"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="52" id="gTg-z4-h0x"/>
-                                </constraints>
-                                <viewLayoutGuide key="safeArea" id="oOk-Tk-FYo"/>
-                                <connections>
-                                    <segue destination="3nQ-lk-ef3" kind="embed" identifier="detailToTagsPreview" id="MSe-ft-K5K"/>
-                                </connections>
-                            </containerView>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.94509803921568625" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="gaD-CA-zpD" firstAttribute="trailing" secondItem="fop-Pk-BjP" secondAttribute="trailing" id="5As-cz-5yD"/>
-                            <constraint firstItem="ugh-UC-flL" firstAttribute="leading" secondItem="Cw4-1C-lvy" secondAttribute="leading" id="EHm-pc-r9z"/>
-                            <constraint firstItem="ugh-UC-flL" firstAttribute="top" secondItem="gaD-CA-zpD" secondAttribute="bottom" id="LCx-ra-aBl"/>
-                            <constraint firstAttribute="bottom" secondItem="ugh-UC-flL" secondAttribute="bottom" id="N4C-8N-ExR"/>
+                            <constraint firstItem="mGe-4Y-RY5" firstAttribute="leading" secondItem="fop-Pk-BjP" secondAttribute="leading" id="FN2-zM-pCE"/>
                             <constraint firstAttribute="bottom" secondItem="dEc-p9-TIN" secondAttribute="bottom" id="TsS-Mf-KMd"/>
                             <constraint firstItem="dEc-p9-TIN" firstAttribute="leading" secondItem="Cw4-1C-lvy" secondAttribute="leading" id="V6s-2P-Ow4"/>
+                            <constraint firstAttribute="bottom" secondItem="mGe-4Y-RY5" secondAttribute="bottom" id="aqV-N3-Yh1"/>
+                            <constraint firstItem="fop-Pk-BjP" firstAttribute="trailing" secondItem="mGe-4Y-RY5" secondAttribute="trailing" id="bhB-qW-jNi"/>
                             <constraint firstItem="dEc-p9-TIN" firstAttribute="trailing" secondItem="Cw4-1C-lvy" secondAttribute="trailing" id="fwK-yL-Y81"/>
-                            <constraint firstItem="gaD-CA-zpD" firstAttribute="leading" secondItem="fop-Pk-BjP" secondAttribute="leading" id="hN3-eB-rx7"/>
-                            <constraint firstItem="ugh-UC-flL" firstAttribute="trailing" secondItem="fop-Pk-BjP" secondAttribute="trailing" id="tPP-Ri-6AK"/>
                             <constraint firstItem="dEc-p9-TIN" firstAttribute="top" secondItem="Cw4-1C-lvy" secondAttribute="top" id="zC3-dU-ezf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fop-Pk-BjP"/>
@@ -304,9 +303,13 @@
                     <navigationItem key="navigationItem" id="hVT-Wu-oDo"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="addTags" destination="9KO-Li-RQe" id="HAQ-EM-jqV"/>
+                        <outlet property="bottomToolbar" destination="gaD-CA-zpD" id="4Si-1i-rPw"/>
+                        <outlet property="deleteButton" destination="G2a-9X-gyL" id="kqP-Wn-uZv"/>
                         <outlet property="screenshotDetail" destination="03h-uT-LU2" id="8Ph-I1-NLh"/>
                         <outlet property="scrollView" destination="dEc-p9-TIN" id="b3I-DK-VFl"/>
-                        <outlet property="toolbarContainer" destination="ugh-UC-flL" id="JbZ-Br-HaW"/>
+                        <outlet property="shareButton" destination="jQn-iE-6VH" id="guw-98-z6A"/>
+                        <outlet property="toolbarContainer" destination="mGe-4Y-RY5" id="CFV-AH-ts4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FCt-YS-bCr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -546,21 +549,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G0k-rj-mNr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="89" y="1010"/>
-        </scene>
-        <!--Tags Preview View Controller-->
-        <scene sceneID="42g-2g-w50">
-            <objects>
-                <viewController modalPresentationStyle="overFullScreen" id="3nQ-lk-ef3" customClass="TagsPreviewViewController" customModule="Collect" customModuleProvider="target" sceneMemberID="viewController">
-                    <connections>
-                        <outlet property="addTags" destination="9KO-Li-RQe" id="cAf-mT-T8E"/>
-                        <outlet property="deleteButton" destination="G2a-9X-gyL" id="aW6-vk-sRj"/>
-                        <outlet property="shareButton" destination="Ua5-An-pVY" id="hZp-6h-YS7"/>
-                        <outlet property="tagsPreview" destination="gaD-CA-zpD" id="QC2-lt-y2r"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8Wq-pB-oIi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1042" y="548"/>
         </scene>
         <!--Search Results View Controller-->
         <scene sceneID="vfJ-pb-iMi">

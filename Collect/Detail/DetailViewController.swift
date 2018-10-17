@@ -21,7 +21,6 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var passedImage: UIImage!
     var passedScreenshotUUID: String?
     
-    var tagsPreviewViewController: TagsPreviewViewController?
     @IBOutlet weak var toolbarContainer: UIView!
     
     @IBOutlet weak var screenshotDetail: UIImageView!
@@ -69,11 +68,50 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "detailToTagsPreview" {
-            tagsPreviewViewController = segue.destination as? TagsPreviewViewController
-            tagsPreviewViewController?.passedImage = passedImage
-            tagsPreviewViewController?.passedScreenshotUUID = passedScreenshotUUID
+    
+    //MARK: Bottom toolbar
+    
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet var bottomToolbar: UIView!
+    @IBOutlet weak var shareButton: NSLayoutConstraint!
+    @IBOutlet weak var addTags: UIButton!
+    
+    let viewController = MainStoryboard.viewController.instantiate()
+    let transitionDelegate = TagsModalTransitioningDelegate()
+    
+    @IBAction func openTags(_ sender: Any) {
+        viewController.transitioningDelegate = self.transitionDelegate
+        viewController.modalPresentationStyle = .custom
+        viewController.passedScreenshotUUID = passedScreenshotUUID
+        UIView.animate(withDuration: 0.3, animations: {
+            self.present(self.viewController, animated: true, completion: nil)
+        })
+    }
+    
+    @IBAction func shareScreenshot(_ sender: Any) {
+        let imageToShare = [ passedImage! ]
+        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
+        self.present(activityViewController, animated: true) {
+        }
+    }
+    
+    @IBAction func deleteScreenshot(_ sender: Any) {
+        let deleteAction = UIAlertAction(title: "Delete screenshot", style: .destructive){ (action:UIAlertAction!) in
+            let realm = try! Realm()
+            let screenshot = realm.objects(Screenshot.self).filter("screenshotID = '\(self.passedScreenshotUUID!)'")
+            try! realm.write {
+                realm.delete(screenshot)
+            }
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
+            self.dismiss(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
+        }
+        let deleteScreenshotAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        deleteScreenshotAlert.addAction(deleteAction)
+        deleteScreenshotAlert.addAction(cancelAction)
+        self.present(deleteScreenshotAlert, animated: true) {
         }
     }
     
