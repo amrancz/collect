@@ -18,6 +18,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     var screenshotImage: UIImage!
     var screenshotUUID: String?
+    var screenshotPosition: Int?
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +52,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         // Dispose of any resources that can be recreated.
     }
     
-    // UIImagePicker to add screenshots
+    //MARK: UIImagePicker to add screenshots
     @IBAction func addScreenshotButton(_ sender: Any) {
         let screenshotPicker = BSImagePickerViewController()
         bs_presentImagePickerController(screenshotPicker, animated: true,
@@ -120,8 +121,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         let screenshots = realm.objects(Screenshot.self)[indexPath.row]
         screenshotImage = cell.imageView.image
         screenshotUUID = screenshots.screenshotID
+        self.screenshotPosition = indexPath.item
         performSegue(withIdentifier: "HomeToDetail", sender: indexPath)
-        print(screenshotUUID as Any)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -130,12 +131,15 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedImage = screenshotImage
             toDetailViewController.passedScreenshotUUID = screenshotUUID
+            toDetailViewController.passedScreenshotPosition = screenshotPosition
         }
     }
     
 }
 
 extension HomeViewController: TBEmptyDataSetDataSource, TBEmptyDataSetDelegate {
+    
+    //MARK: Configure empty state
     func emptyDataSetShouldDisplay(in scrollView: UIScrollView) -> Bool {
         if screenshotCollectionHome.numberOfItems(inSection: 0) == 0 {
             return true

@@ -1139,16 +1139,16 @@
 		6654FEB32117856F00E0D4BA /* Collect */ = {
 			isa = PBXGroup;
 			children = (
-				66F329DD2126969C00C65DF6 /* Settings */,
-				66DE45AF211DBDAF00702A11 /* Detail */,
-				6697B9B8216341F800DA10B6 /* Search */,
 				6654FEB42117856F00E0D4BA /* AppDelegate.swift */,
 				6654FEB62117857000E0D4BA /* HomeViewController.swift */,
-				6654FEB82117857000E0D4BA /* Main.storyboard */,
 				66DE45AD211DB2EE00702A11 /* ScreenshotCell.swift */,
+				66DE45AF211DBDAF00702A11 /* Detail */,
+				6697B9B8216341F800DA10B6 /* Search */,
+				66F329DD2126969C00C65DF6 /* Settings */,
+				6654FEB82117857000E0D4BA /* Main.storyboard */,
+				6654FEBD2117857400E0D4BA /* LaunchScreen.storyboard */,
 				6617AA3E212F1CA2002DDEE9 /* Data Model */,
 				6654FEBB2117857400E0D4BA /* Assets.xcassets */,
-				6654FEBD2117857400E0D4BA /* LaunchScreen.storyboard */,
 				6654FEC02117857400E0D4BA /* Info.plist */,
 			);
 			path = Collect;

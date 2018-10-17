@@ -20,11 +20,14 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     
     var passedImage: UIImage!
     var passedScreenshotUUID: String?
+    var passedScreenshotPosition: Int?
     
     @IBOutlet weak var toolbarContainer: UIView!
     
     @IBOutlet weak var screenshotDetail: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
+    
+    var slider: UIPageControl = UIPageControl(frame: CGRect.init(x: 0, y: 0, width: 375, height: 667))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +42,9 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         super.viewDidAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
     }
+    
+    
+    //MARK: Toggle UI on tap
     
     var visible: Bool = true
 
@@ -72,7 +78,6 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
             }, completion: nil)
         }
     }
-    
     
     //MARK: Bottom toolbar
     
