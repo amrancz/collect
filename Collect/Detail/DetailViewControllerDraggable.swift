@@ -33,14 +33,14 @@ class DetailViewControllerDraggable: UIViewController {
             originalPosition = view.center
             currentPositionTouched = sender.location(in: view)
         } else if sender.state == .changed {
-            view.frame.origin = CGPoint(x: translation.x, y: translation.y)
+            view.frame.origin = CGPoint(x: 0, y: translation.y)
         } else if sender.state == .ended {
             let velocity = sender.velocity(in: view)
             
             if velocity.y >= 1500 {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-                    self.view.frame.origin = CGPoint(x: self.view.frame.origin.x, y: self.view.frame.size.height)
+                    self.view.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height)
                 }, completion: { (isCompleted) in
                     if isCompleted {
                         self.dismiss(animated: false, completion: nil)

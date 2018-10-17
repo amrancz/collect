@@ -22,10 +22,12 @@ class TagsPreviewViewController: UIViewController {
     let viewController = MainStoryboard.viewController.instantiate()
     let transitionDelegate = TagsModalTransitioningDelegate()
     
+    var passedImage: UIImage!
     var passedScreenshotUUID: String?
     
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet var tagsPreview: UIView!
+    @IBOutlet weak var shareButton: NSLayoutConstraint!
     
     @IBOutlet weak var addTags: UIButton!
     
@@ -40,13 +42,20 @@ class TagsPreviewViewController: UIViewController {
     
     override func viewDidLoad() {
         tagsPreview.layer.shadowColor = UIColor.black.cgColor
-        tagsPreview.layer.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.9450980392, blue: 0.9490196078, alpha: 1)
-        tagsPreview.layer.shadowRadius = 8
-        tagsPreview.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.4)
-        tagsPreview.layer.shadowOpacity = 0.3
-        tagsPreview.layer.cornerRadius = 10
+        tagsPreview.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
+//        tagsPreview.layer.shadowRadius = 8
+//        tagsPreview.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.4)
+//        tagsPreview.layer.shadowOpacity = 0.3
+//        tagsPreview.layer.cornerRadius = 10
         tagsPreview.layer.masksToBounds = false
         tagsPreview.clipsToBounds = false
+    }
+    @IBAction func shareScreenshot(_ sender: Any) {
+        let imageToShare = [ passedImage! ]
+        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
+        self.present(activityViewController, animated: true) {
+        }
     }
     
     @IBAction func deleteScreenshot(_ sender: Any) {

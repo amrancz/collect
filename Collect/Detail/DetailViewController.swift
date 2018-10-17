@@ -72,6 +72,7 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detailToTagsPreview" {
             tagsPreviewViewController = segue.destination as? TagsPreviewViewController
+            tagsPreviewViewController?.passedImage = passedImage
             tagsPreviewViewController?.passedScreenshotUUID = passedScreenshotUUID
         }
     }
