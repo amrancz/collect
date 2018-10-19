@@ -26,6 +26,7 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     var screenshotUUID: String?
     
     var passedScreenshotIDs: [String] = []
+    var passedScreenshotImageSet: [UIImage?] = []
     
     func searchedScreenshots() -> Results<Screenshot> {
         let realm = try! Realm()
@@ -100,6 +101,7 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
             let toDetailNavigationController = segue.destination as! UINavigationController
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedImage = screenshotImage
+            toDetailViewController.passedScreenshotImageSet = passedScreenshotImageSet
             toDetailViewController.passedScreenshotUUID = screenshotUUID
         }
     }

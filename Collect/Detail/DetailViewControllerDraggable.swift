@@ -32,6 +32,9 @@ class DetailViewControllerDraggable: UIViewController {
         if sender.state == .began {
             originalPosition = view.center
             currentPositionTouched = sender.location(in: view)
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                self.view.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
+            }, completion: nil)
         } else if sender.state == .changed {
             view.frame.origin = CGPoint(x: 0, y: translation.y)
         } else if sender.state == .ended {
@@ -40,6 +43,7 @@ class DetailViewControllerDraggable: UIViewController {
             if velocity.y >= 1500 {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+                    self.setNeedsStatusBarAppearanceUpdate()
                     self.view.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height)
                 }, completion: { (isCompleted) in
                     if isCompleted {
@@ -49,6 +53,9 @@ class DetailViewControllerDraggable: UIViewController {
             } else {
                 UIView.animate(withDuration: 0.2, animations: {
                     self.view.center = self.originalPosition!
+                    UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                        self.view.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                    }, completion: nil)
                 })
             }
         }

@@ -21,6 +21,24 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     @IBOutlet weak var searchButtonContainer: UIView!
     
     var selectedScreenshotsIDs: [String] = []
+    var screenshotImageSet: [UIImage?] = []
+    
+    func getDocumentsDirectory() -> URL {
+        let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return documentsDirectoryURL
+    }
+    
+    func screenshotsToPass(){
+        let realm = try! Realm()
+        let screenshots = realm.objects(Screenshot.self).filter("%@ CONTAINS screenshotID", selectedScreenshotsIDs)
+        for screenshot in screenshots {
+            let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
+            let screenshotPath = screenshotURL.path
+            if let imageData = UIImage(contentsOfFile: screenshotPath) {
+                screenshotImageSet.append(imageData)
+            }
+        }
+    }
     
     var isSearchActive:Bool = false
     
@@ -216,12 +234,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     }
     
     @IBAction func searchButtonTapped(_ sender: Any) {
+        self.screenshotsToPass()
+        print(self.screenshotImageSet)
         performSegue(withIdentifier: "SearchToResults", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "SearchToResults" {
             let toSearchResultsViewController = segue.destination as! SearchResultsViewController
+            toSearchResultsViewController.passedScreenshotImageSet = screenshotImageSet
             toSearchResultsViewController.passedScreenshotIDs = selectedScreenshotsIDs
         }
     }

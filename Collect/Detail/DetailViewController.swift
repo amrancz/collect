@@ -25,12 +25,12 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var passedScreenshotImageSet: [UIImage?] = []
     
     //MARK: Setup slideshow
-    @IBOutlet var screenshotSlideshow: ImageSlideshow!
+    @IBOutlet weak var screenshotSlideshow: ImageSlideshow!
+    var imageSource: [ImageSource] = []
     
     @IBOutlet weak var toolbarContainer: UIView!
     
     @IBOutlet weak var screenshotDetail: UIImageView!
-    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,22 +42,21 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         self.navigationController?.isNavigationBarHidden = true
         self.modalPresentationCapturesStatusBarAppearance = true
         
-        var slideshowSource: [ImageSource] = []
-        for image in passedScreenshotImageSet {
-            let img = image
-            slideshowSource.append(ImageSource(image:img!))
+        for screenshot in passedScreenshotImageSet {
+            let img = screenshot
+            imageSource.append(ImageSource(image: img!))
         }
         
-        print(slideshowSource)
-        
-//        screenshotSlideshow.setImageInputs(slideshowSource)
-        scrollView.isHidden = true
         print(passedScreenshotImageSet)
+        self.screenshotSlideshow.setImageInputs(imageSource)
+        self.screenshotSlideshow.setCurrentPage(passedScreenshotPosition!, animated: false)
+        self.screenshotSlideshow.pageIndicator = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
+        self.setNeedsStatusBarAppearanceUpdate()
     }
     
     //MARK: Toggle UI on tap
@@ -77,10 +76,12 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     @IBAction func hideUI() {
         originalToolBarPosition = self.toolbarContainer.center
         if visible == true {
+//            UIView.animate(withDuration: 0.3, delay: 0.5, options: .curveEaseInOut, animations: {
+//                self.toolbarContainer.isHidden = true
+//            }, completion: nil)
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
                 self.visible = false
                 self.view.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-//                self.toolbarContainer.isHidden = true
                 self.toolbarContainer.frame.origin = CGPoint(x: 0, y: self.view.layer.bounds.height )
                 self.setNeedsStatusBarAppearanceUpdate()
             }, completion: nil)
@@ -89,8 +90,10 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
                 self.visible = true
                 self.view.layer.backgroundColor = #colorLiteral(red: 0.9497935176, green: 0.9562532306, blue: 0.9594267011, alpha: 1)
                 self.toolbarContainer.frame.origin = CGPoint(x: 0, y: self.view.layer.bounds.height - self.toolbarContainer.layer.bounds.height)
-//                self.toolbarContainer.isHidden = false
                 self.setNeedsStatusBarAppearanceUpdate()
+            }, completion: nil)
+            UIView.animate(withDuration: 0.3, delay: 0.5, options: .curveEaseInOut, animations: {
+                self.toolbarContainer.isHidden = false
             }, completion: nil)
         }
     }
@@ -104,7 +107,12 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     
     let viewController = MainStoryboard.viewController.instantiate()
     let transitionDelegate = TagsModalTransitioningDelegate()
-    
+//
+//    func passScreenshotID() {
+//        let realm = try! Realm()
+//        let screenshot = realm.objects(Screenshot.self).filter("screenshotID = '\(self.passedScreenshotUUID!)'")
+//    }
+//
     @IBAction func openTags(_ sender: Any) {
         viewController.transitioningDelegate = self.transitionDelegate
         viewController.modalPresentationStyle = .custom
