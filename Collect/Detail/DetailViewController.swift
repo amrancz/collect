@@ -47,9 +47,10 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
             imageSource.append(ImageSource(image: img!))
         }
         
-        print(passedScreenshotImageSet)
+        print(passedScreenshotPosition!)
         self.screenshotSlideshow.setImageInputs(imageSource)
         self.screenshotSlideshow.setCurrentPage(passedScreenshotPosition!, animated: false)
+        print(self.screenshotSlideshow.currentPage)
         self.screenshotSlideshow.pageIndicator = nil
     }
     
