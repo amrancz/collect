@@ -22,6 +22,7 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var passedImage: UIImage!
     var passedScreenshotUUID: String?
     var passedScreenshotPosition: Int?
+    var screenshotIDSet: [String?] = []
     var passedScreenshotImageSet: [UIImage?] = []
     
     //MARK: Setup slideshow
@@ -47,17 +48,33 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
             imageSource.append(ImageSource(image: img!))
         }
         
-        print(passedScreenshotPosition!)
         self.screenshotSlideshow.setImageInputs(imageSource)
         self.screenshotSlideshow.setCurrentPage(passedScreenshotPosition!, animated: false)
         print(self.screenshotSlideshow.currentPage)
         self.screenshotSlideshow.pageIndicator = nil
+        getScreenshotIDs()
+        print(passedScreenshotUUID!)
+        let indexOfID = screenshotIDSet.firstIndex(of: passedScreenshotUUID)
+        print(indexOfID!)
+        self.screenshotSlideshow.currentPageChanged = { page in
+            print("current page:", page)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
         self.setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    func getScreenshotIDs() {
+        let realm = try! Realm()
+        let screenshots = realm.objects(Screenshot.self)
+        for screenshot in screenshots {
+            let id = screenshot.screenshotID
+            screenshotIDSet.append(id)
+        }
+        print(screenshotIDSet)
     }
     
     //MARK: Toggle UI on tap
