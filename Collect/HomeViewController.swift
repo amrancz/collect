@@ -161,7 +161,7 @@ extension HomeViewController: TBEmptyDataSetDataSource, TBEmptyDataSetDelegate {
         var attributes: [NSAttributedString.Key: Any]?
         attributes = [.font: UIFont.systemFont(ofSize: 22, weight: UIFont.Weight.heavy),
                       .foregroundColor: UIColor.black]
-        return NSAttributedString(string: "Something’s missing", attributes: attributes)
+        return NSAttributedString(string: "Your collection is empty", attributes: attributes)
     }
     
     func descriptionForEmptyDataSet(in scrollView: UIScrollView) -> NSAttributedString? {

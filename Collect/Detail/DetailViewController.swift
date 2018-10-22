@@ -50,14 +50,13 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         
         self.screenshotSlideshow.setImageInputs(imageSource)
         self.screenshotSlideshow.setCurrentPage(passedScreenshotPosition!, animated: false)
-        print(self.screenshotSlideshow.currentPage)
         self.screenshotSlideshow.pageIndicator = nil
         getScreenshotIDs()
-        print(passedScreenshotUUID!)
-        let indexOfID = screenshotIDSet.firstIndex(of: passedScreenshotUUID)
-        print(indexOfID!)
         self.screenshotSlideshow.currentPageChanged = { page in
             print("current page:", page)
+            // TO-DO: Fix "Index out of range"
+            self.passedScreenshotUUID = self.screenshotIDSet[page]
+            print(self.passedScreenshotUUID as Any)
         }
     }
     
@@ -135,6 +134,7 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         viewController.transitioningDelegate = self.transitionDelegate
         viewController.modalPresentationStyle = .custom
         viewController.passedScreenshotUUID = passedScreenshotUUID
+        print(passedScreenshotUUID!)
         UIView.animate(withDuration: 0.3, animations: {
             self.present(self.viewController, animated: true, completion: nil)
         })
@@ -155,6 +155,7 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
             try! realm.write {
                 realm.delete(screenshot)
             }
+            self.passedScreenshotImageSet.remove(at: self.passedScreenshotPosition!)
             NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
             self.dismiss(animated: true)
         }
