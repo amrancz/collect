@@ -59,6 +59,9 @@
                                         <state key="normal" title="Import your screenshots">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="addScreenshotButton:" destination="9zL-E0-rRB" eventType="touchUpInside" id="Wj4-jT-gT5"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
