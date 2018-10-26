@@ -19,6 +19,12 @@ class WelcomeViewController: UIViewController {
     var screenshotUUID: String?
     var screenshotPosition: Int?
     var screenshotImageSet: [UIImage?] = []
+    @IBOutlet weak var importButton: UIButton!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.importButton.layer.cornerRadius = 25
+    }
     
     //MARK: UIImagePicker to add screenshots
     @IBAction func addScreenshotButton(_ sender: Any) {
@@ -48,7 +54,10 @@ class WelcomeViewController: UIViewController {
                 try! realm.write {
                     realm.add(screenshot)
                 }
+                NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
+                
             }
+            self.performSegue(withIdentifier: "WelcomeToHome", sender: self)
         }, completion: nil)
     }
 }
