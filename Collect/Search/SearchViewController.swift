@@ -73,8 +73,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         }
         self.searchButton.setTitle("No results", for: .disabled)
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -34,6 +34,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         self.searchButton.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.4)
         self.searchButton.layer.shadowOpacity = 0.6
         self.searchButton.layer.masksToBounds = false
+        self.getScreenshotCount()
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCollection(_:)), name: Notification.Name(rawValue: "reloadCollection"), object: nil)
         print(Realm.Configuration.defaultConfiguration.fileURL!)
@@ -52,6 +53,17 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func getScreenshotCount() {
+        let albumsPhoto:PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        
+        albumsPhoto.enumerateObjects({(collection, index, object) in
+            if collection.localizedTitle == "Screenshots"{
+                let photoInAlbum = PHAsset.fetchAssets(in: collection, options: nil)
+                print(photoInAlbum.count) //Screenshots albums count
+            }
+        })
     }
     
     //MARK: UIImagePicker to add screenshots
@@ -93,6 +105,10 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         }
     }
     
+    func dismissComplete() {
+        self.screenshotCollectionHome.reloadData()
+    }
+    
     
     @IBOutlet weak var searchButton: UIButton!
     
@@ -132,6 +148,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         screenshotImage = cell.imageView.image
         screenshotUUID = screenshots.screenshotID
         self.screenshotPosition = indexPath.item
+        print(screenshotPosition!)
         performSegue(withIdentifier: "HomeToDetail", sender: indexPath)
     }
     
@@ -182,4 +199,5 @@ extension HomeViewController: TBEmptyDataSetDataSource, TBEmptyDataSetDelegate {
     }
 
 }
+
 

@@ -29,6 +29,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     override func viewDidLoad() {
+        print(self.selectedScreenshot.first?.tags as Any)
         super.viewDidLoad()
         let tagCellNib = UINib(nibName: "TagCell", bundle: nil)
         self.tagsModalCollectionView.register(tagCellNib, forCellWithReuseIdentifier: reuseIdentifier)

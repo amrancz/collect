@@ -38,7 +38,6 @@ class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDeleg
         var configure = TLPhotosPickerConfigure()
         configure.allowedLivePhotos = false
         configure.usedCameraButton = false
-        
         self.present(pickerVC, animated: true, completion: nil)
     }
     

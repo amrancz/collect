@@ -33,6 +33,13 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     
     @IBOutlet weak var screenshotDetail: UIImageView!
     
+    func populateSlideshow() {
+        for screenshot in passedScreenshotImageSet {
+            let img = screenshot
+            imageSource.append(ImageSource(image: img!))
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,15 +49,11 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         
         self.navigationController?.isNavigationBarHidden = true
         self.modalPresentationCapturesStatusBarAppearance = true
-        
-        for screenshot in passedScreenshotImageSet {
-            let img = screenshot
-            imageSource.append(ImageSource(image: img!))
-        }
-        
+        self.populateSlideshow()
         self.screenshotSlideshow.setImageInputs(imageSource)
         self.screenshotSlideshow.setCurrentPage(passedScreenshotPosition!, animated: false)
         self.screenshotSlideshow.pageIndicator = nil
+        print("current page:", screenshotSlideshow.currentPage)
         getScreenshotIDs()
         self.screenshotSlideshow.currentPageChanged = { page in
             print("current page:", page)
@@ -124,17 +127,11 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     
     let viewController = MainStoryboard.viewController.instantiate()
     let transitionDelegate = TagsModalTransitioningDelegate()
-//
-//    func passScreenshotID() {
-//        let realm = try! Realm()
-//        let screenshot = realm.objects(Screenshot.self).filter("screenshotID = '\(self.passedScreenshotUUID!)'")
-//    }
-//
+
     @IBAction func openTags(_ sender: Any) {
         viewController.transitioningDelegate = self.transitionDelegate
         viewController.modalPresentationStyle = .custom
         viewController.passedScreenshotUUID = passedScreenshotUUID
-        print(passedScreenshotUUID!)
         UIView.animate(withDuration: 0.3, animations: {
             self.present(self.viewController, animated: true, completion: nil)
         })
@@ -155,7 +152,10 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
             try! realm.write {
                 realm.delete(screenshot)
             }
-            self.passedScreenshotImageSet.remove(at: self.passedScreenshotPosition!)
+            self.screenshotIDSet.remove(at: self.screenshotSlideshow.currentPage)
+            self.passedScreenshotImageSet.removeAll()
+            self.populateSlideshow()
+            print(self.passedScreenshotImageSet)
             NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
             self.dismiss(animated: true)
         }

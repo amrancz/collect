@@ -699,7 +699,6 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="addScreenshotButton:" destination="aWE-Lw-E5G" eventType="touchUpInside" id="uii-II-FNz"/>
                                             <action selector="addScreenshotsWith_sender:" destination="aWE-Lw-E5G" eventType="touchUpInside" id="ch0-1b-lXr"/>
                                         </connections>
                                     </button>
