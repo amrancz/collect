@@ -89,7 +89,7 @@
         <!--Home View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="HomeViewController" customModule="Collect" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeViewController" id="BYZ-38-t0r" customClass="HomeViewController" customModule="Collect" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -148,7 +148,7 @@
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" image="ic_add" style="done" id="fWz-PZ-9sg">
                                             <connections>
-                                                <action selector="addScreenshotButton:" destination="BYZ-38-t0r" id="boX-aH-CMZ"/>
+                                                <action selector="addScreenshotsWith_sender:" destination="BYZ-38-t0r" id="cxn-4M-ngT"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -652,7 +652,7 @@
         <!--Welcome View Controller-->
         <scene sceneID="0K3-np-Zlq">
             <objects>
-                <viewController id="aWE-Lw-E5G" customClass="WelcomeViewController" customModule="Collect" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WelcomeViewController" id="aWE-Lw-E5G" customClass="WelcomeViewController" customModule="Collect" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FBz-Gu-Nk2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -700,15 +700,18 @@
                                         </state>
                                         <connections>
                                             <action selector="addScreenshotButton:" destination="aWE-Lw-E5G" eventType="touchUpInside" id="uii-II-FNz"/>
+                                            <action selector="addScreenshotsWith_sender:" destination="aWE-Lw-E5G" eventType="touchUpInside" id="ch0-1b-lXr"/>
                                         </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Xjl-3b-2bi" firstAttribute="leading" secondItem="icF-wn-io2" secondAttribute="leading" constant="20" id="5yg-Wi-NkU"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="4Qn-bZ-GIM" secondAttribute="trailing" constant="20" symbolic="YES" id="6kY-GC-Ao9"/>
                                     <constraint firstAttribute="trailing" secondItem="Xjl-3b-2bi" secondAttribute="trailing" constant="20" id="8cX-Tm-Vmx"/>
                                     <constraint firstItem="Xjl-3b-2bi" firstAttribute="top" secondItem="4Qn-bZ-GIM" secondAttribute="bottom" constant="30" id="GrI-PQ-NId"/>
                                     <constraint firstItem="iGQ-1v-0x2" firstAttribute="top" secondItem="icF-wn-io2" secondAttribute="top" constant="20" id="IvE-AW-Kmg"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="iGQ-1v-0x2" secondAttribute="trailing" constant="20" symbolic="YES" id="Mh7-Ic-WOs"/>
                                     <constraint firstAttribute="height" constant="262" id="QDq-rG-jzZ"/>
                                     <constraint firstItem="4Qn-bZ-GIM" firstAttribute="top" secondItem="iGQ-1v-0x2" secondAttribute="bottom" constant="10" id="Sv2-rc-fmM"/>
                                     <constraint firstItem="4Qn-bZ-GIM" firstAttribute="leading" secondItem="icF-wn-io2" secondAttribute="leading" constant="20" id="vMf-h8-Pvb"/>

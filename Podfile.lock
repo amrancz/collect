@@ -13,12 +13,14 @@ PODS:
   - RealmSwift (3.11.0):
     - Realm (= 3.11.0)
   - TBEmptyDataSet (2.8)
+  - TLPhotoPicker (1.7.4)
 
 DEPENDENCIES:
   - BSImagePicker (~> 2.8)
   - ImageSlideshow (~> 1.6)
   - RealmSwift
   - TBEmptyDataSet
+  - TLPhotoPicker
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -29,6 +31,7 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - TBEmptyDataSet
+    - TLPhotoPicker
 
 SPEC CHECKSUMS:
   BSGridCollectionViewLayout: 3e6f23b3a2b4f0ca9afae09ca01389d1057f7b32
@@ -38,7 +41,8 @@ SPEC CHECKSUMS:
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
   RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
   TBEmptyDataSet: eabe80f13fe620156068d4c3e2ce56227042c96a
+  TLPhotoPicker: ced10aa9cdbce11bda2272f919cdace69e964239
 
-PODFILE CHECKSUM: 9617048aef44987cf3c2cd95c1bbbb541bd8debe
+PODFILE CHECKSUM: 30121bdba15158034b4c45935e12133d213b54c3
 
 COCOAPODS: 1.5.2

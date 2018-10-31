@@ -13,8 +13,9 @@ import RealmSwift
 import BSImagePicker
 import Photos
 import TBEmptyDataSet
+import TLPhotoPicker
 
-class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource{
+class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, TLPhotosPickerViewControllerDelegate {
     
     var screenshotImage: UIImage!
     var screenshotUUID: String?
@@ -54,39 +55,44 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     //MARK: UIImagePicker to add screenshots
-    @IBAction func addScreenshotButton(_ sender: Any) {
-        let screenshotPicker = BSImagePickerViewController()
-        bs_presentImagePickerController(screenshotPicker, animated: true,
-            select: { (asset: PHAsset) -> Void in
-        }, deselect: { (asset: PHAsset) -> Void in
-        }, cancel: { (assets: [PHAsset]) -> Void in
-        }, finish: { (assets: [PHAsset]) -> Void in
-            for asset in assets {
-                let manager = PHImageManager.default()
-                let option = PHImageRequestOptions()
-                var image = UIImage()
-                option.isSynchronous = true
-                manager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
-                    image = result!
-                })
-                let imageData = image.pngData() as Data?
-                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                let uuid = UUID().uuidString
-                let screenshot = Screenshot()
-                let writePath = documentsDirectory.appendingPathComponent("\(uuid).png")
-                try! imageData?.write(to: writePath as URL, options: [.atomic])
-                screenshot.screenshotID = uuid
-                screenshot.screenshotFileName = "\(uuid).png"
-                let realm = try! Realm()
-                try! realm.write {
-                    realm.add(screenshot)
-                }
-            }
-            DispatchQueue.main.async{
-                self.screenshotCollectionHome.reloadData()
-            }
-        }, completion: nil)
+    
+    @IBAction func addScreenshots(_sender: Any) {
+        let pickerVC = TLPhotosPickerViewController()
+        pickerVC.delegate = self
+        var configure = TLPhotosPickerConfigure()
+        configure.allowedLivePhotos = false
+        configure.usedCameraButton = false
+        
+        self.present(pickerVC, animated: true, completion: nil)
     }
+    
+    func dismissPhotoPicker(withPHAssets: [PHAsset]) {
+        for asset in withPHAssets {
+            let manager = PHImageManager.default()
+            let option = PHImageRequestOptions()
+            var image = UIImage()
+            option.isSynchronous = true
+            manager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
+                image = result!
+            })
+            let imageData = image.pngData() as Data?
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let uuid = UUID().uuidString
+            let screenshot = Screenshot()
+            let writePath = documentsDirectory.appendingPathComponent("\(uuid).png")
+            try! imageData?.write(to: writePath as URL, options: [.atomic])
+            screenshot.screenshotID = uuid
+            screenshot.screenshotFileName = "\(uuid).png"
+            let realm = try! Realm()
+            try! realm.write {
+                realm.add(screenshot)
+            }
+        }
+        DispatchQueue.main.async{
+            self.screenshotCollectionHome.reloadData()
+        }
+    }
+    
     
     @IBOutlet weak var searchButton: UIButton!
     

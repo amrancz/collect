@@ -13,17 +13,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-//        self.window = UIWindow(frame: UIScreen.main.bounds)
-//        
-//        let storyboard = UIStoryboard(name: "Welcome", bundle: nil)
-//        
-//        let initialVC = storyboard.instantiateViewController(withIdentifier: "WelcomeViewController")
-//        
-//        self.window?.rootViewController = initialVC
-//        self.window?.makeKeyAndVisible()
+//        // Override point for customization after application launch.
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let initialVC = storyboard.instantiateViewController(withIdentifier:  "HomeViewController")
+        let launchedFlag = UserDefaults.standard.bool(forKey: "firstImport")
+        if launchedFlag {
+            window?.rootViewController = initialVC
+        } else {
+            UserDefaults.standard.set(true, forKey: "firstImport")
+        }
+//        window?.makeKeyAndVisible()
         return true
     }
 
