@@ -58,7 +58,8 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
             print("current page:", page)
             // TO-DO: Fix "Index out of range"
             self.passedScreenshotUUID = self.screenshotIDSet[page]
-            print(self.passedScreenshotUUID as Any)
+            print("screenshotID is:", self.passedScreenshotUUID as Any)
+
         }
     }
     
@@ -154,7 +155,6 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
             self.screenshotIDSet.remove(at: self.screenshotSlideshow.currentPage)
             self.passedScreenshotImageSet.removeAll()
             self.populateSlideshow()
-            print(self.passedScreenshotImageSet)
             NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
             self.dismiss(animated: true)
         }

@@ -17,7 +17,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     
     let realm = try! Realm()
     var passedScreenshotUUID: String?
-    lazy var selectedScreenshot = realm.objects(Screenshot.self).filter("screenshotID == %@", passedScreenshotUUID!)
+    var selectedScreenshot: Results<Screenshot>?
     
     
     @IBOutlet var tagsModalCollectionView: UICollectionView!
@@ -29,8 +29,8 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     override func viewDidLoad() {
-        print(self.selectedScreenshot.first?.tags as Any)
         super.viewDidLoad()
+        selectedScreenshot = realm.objects(Screenshot.self).filter("screenshotID == %@", passedScreenshotUUID!)
         let tagCellNib = UINib(nibName: "TagCell", bundle: nil)
         self.tagsModalCollectionView.register(tagCellNib, forCellWithReuseIdentifier: reuseIdentifier)
         self.tagsModalCollectionView.delegate = self
@@ -41,6 +41,9 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print(self.passedScreenshotUUID as Any)
+        print(self.selectedScreenshot!.first?.tags as Any)
+
     }
     
     func usedTags() -> List<Tag> {
@@ -115,7 +118,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell: TagCell = tagsModalCollectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
         let selectedTag = unusedTags().sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
-        if let screenshotToSaveTo = self.selectedScreenshot.first {
+        if let screenshotToSaveTo = self.selectedScreenshot!.first {
             try! realm.write {
                 screenshotToSaveTo.tags.append(selectedTag)
             }
@@ -128,7 +131,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell: TagCell = tagsModalCollectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
         let selectedTag = usedTags().sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
-        let screenshot = selectedScreenshot.first
+        let screenshot = selectedScreenshot!.first
         try! realm.write {
             if let index = screenshot?.tags.index(of: selectedTag) {
                 screenshot?.tags.remove(at: index)
@@ -152,7 +155,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
             tag.tagID = uuid
             let textField = addTagAlertController.textFields?.first
             tag.tagName = (textField?.text!)!
-            let screenshotToSaveTo = self.selectedScreenshot.first
+            let screenshotToSaveTo = self.selectedScreenshot!.first
             try! realm.write {
                 realm.add(tag, update: true)
                 screenshotToSaveTo?.tags.append(tag)
