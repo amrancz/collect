@@ -19,7 +19,7 @@ private struct MainStoryboard: StoryboardType {
 
 class DetailViewController: DetailViewControllerDraggable, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate {
     
-    var passedImage: UIImage!
+//    var passedImage: UIImage!
     var passedScreenshotUUID: String?
     var passedScreenshotPosition: Int?
     var screenshotIDSet: [String?] = []
@@ -44,7 +44,6 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         super.viewDidLoad()
         
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-        screenshotDetail.image = passedImage
         screenshotDetail.contentMode = .scaleAspectFit
         
         self.navigationController?.isNavigationBarHidden = true
@@ -138,8 +137,8 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     }
     
     @IBAction func shareScreenshot(_ sender: Any) {
-        let imageToShare = [ passedImage! ]
-        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+        let imageToShare = passedScreenshotImageSet[passedScreenshotPosition!] as Any
+        let activityViewController = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = self.view
         self.present(activityViewController, animated: true) {
         }

@@ -25,6 +25,7 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     var screenshotImage: UIImage!
     var screenshotUUID: String?
     
+    var screenshotPosition: Int?
     var passedScreenshotIDs: [String] = []
     var passedScreenshotImageSet: [UIImage?] = []
     
@@ -91,8 +92,9 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = screenshotCollectionHome.cellForItem(at: indexPath) as! ScreenshotCell
         let screenshots = searchedScreenshots()[indexPath.row]
-        screenshotImage = cell.imageView.image
         screenshotUUID = screenshots.screenshotID
+        screenshotImage = cell.imageView.image
+        self.screenshotPosition = indexPath.item
         performSegue(withIdentifier: "SearchResultsToDetail", sender: indexPath)
     }
     
@@ -100,9 +102,10 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
         if segue.identifier == "SearchResultsToDetail" {
             let toDetailNavigationController = segue.destination as! UINavigationController
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
-            toDetailViewController.passedImage = screenshotImage
-            toDetailViewController.passedScreenshotImageSet = passedScreenshotImageSet
             toDetailViewController.passedScreenshotUUID = screenshotUUID
+            toDetailViewController.passedScreenshotImageSet = passedScreenshotImageSet
+            toDetailViewController.passedScreenshotPosition = screenshotPosition
+            toDetailViewController.screenshotIDSet = passedScreenshotIDs
         }
     }
     

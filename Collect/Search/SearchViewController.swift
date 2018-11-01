@@ -30,10 +30,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     
     func screenshotsToPass(){
         let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self).filter("%@ CONTAINS screenshotID", selectedScreenshotsIDs)
+        let screenshots = realm.objects(Screenshot.self).filter("screenshotID IN %@", selectedScreenshotsIDs)
         for screenshot in screenshots {
             let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
             let screenshotPath = screenshotURL.path
+            let screenshotID = screenshot.screenshotID
+            selectedScreenshotsIDs.append(screenshotID)
             if let imageData = UIImage(contentsOfFile: screenshotPath) {
                 screenshotImageSet.append(imageData)
             }
@@ -58,7 +60,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         self.searchBar.returnKeyType = .done
         
         let tagCellNib = UINib(nibName: "TagCell", bundle: nil)
-//        self.navigationController?.isNavigationBarHidden = true
         self.searchTagsCollectionView.register(tagCellNib, forCellWithReuseIdentifier: reuseIdentifier)
         self.searchTagsCollectionView.delegate = self
         self.searchTagsCollectionView.dataSource = self

@@ -17,7 +17,6 @@ import TLPhotoPicker
 
 class HomeViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, TLPhotosPickerViewControllerDelegate {
     
-    var screenshotImage: UIImage!
     var screenshotUUID: String?
     var screenshotPosition: Int?
     var screenshotImageSet: [UIImage?] = []
@@ -142,10 +141,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = screenshotCollectionHome.cellForItem(at: indexPath) as! ScreenshotCell
         let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self)[indexPath.row]
-        screenshotImage = cell.imageView.image
         screenshotUUID = screenshots.screenshotID
         self.screenshotPosition = indexPath.item
         print(screenshotPosition!)
@@ -156,7 +153,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         if segue.identifier == "HomeToDetail" {
             let toDetailNavigationController = segue.destination as! UINavigationController
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
-            toDetailViewController.passedImage = screenshotImage
             toDetailViewController.passedScreenshotUUID = screenshotUUID
             toDetailViewController.passedScreenshotImageSet = screenshotImageSet
             toDetailViewController.passedScreenshotPosition = screenshotPosition
