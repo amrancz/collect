@@ -29,9 +29,12 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     var passedScreenshotIDs: [String] = []
     var passedScreenshotImageSet: [UIImage?] = []
     
+    var screenshotsToPass: Results<Screenshot>!
+    
     func searchedScreenshots() -> Results<Screenshot> {
         let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self).filter("screenshotID IN %@", passedScreenshotIDs)
+        screenshotsToPass = screenshots
         return screenshots
     }
     
@@ -105,6 +108,7 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
             toDetailViewController.passedScreenshotUUID = screenshotUUID
             toDetailViewController.passedScreenshotPosition = screenshotPosition
             toDetailViewController.screenshotIDSet = passedScreenshotIDs
+            toDetailViewController.passedScreenshots = screenshotsToPass
         }
     }
     

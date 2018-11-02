@@ -23,6 +23,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     var selectedScreenshotsIDs: [String] = []
     var screenshotImageSet: [UIImage?] = []
     
+    var filteredTags: Results<Tag>!
+    
     func getDocumentsDirectory() -> URL {
         let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         return documentsDirectoryURL
@@ -58,6 +60,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         self.searchController.hidesNavigationBarDuringPresentation = false
         self.searchController.searchBar.becomeFirstResponder()
         self.searchBar.returnKeyType = .done
+        filteredTags = allTags()
         
         let tagCellNib = UINib(nibName: "TagCell", bundle: nil)
         self.searchTagsCollectionView.register(tagCellNib, forCellWithReuseIdentifier: reuseIdentifier)
@@ -146,10 +149,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         }
     }
     
-    func tagsCount() -> Int {
-        let tags = realm.objects(Tag.self)
-        let tagsCount = tags.count
-        return tagsCount
+    func allTags() -> Results<Tag> {
+        let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
+        return tags
     }
     
     func configureCell(_ cell: TagCell, forIndexPath indexPath: IndexPath) {
@@ -166,8 +168,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         //            tagsModalCollectionView.deselectItem(at: indexPath, animated: false)
         //            cell.tagCellLabel.text = tagInfo.tagName
         //        }
-        let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
-        let tagInfo = tags[indexPath.row]
+        let tagInfo = filteredTags[indexPath.row]
         cell.tagCellLabel.text = tagInfo.tagName
     }
     
@@ -184,7 +185,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tagsCount()
+        return filteredTags.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -203,14 +204,19 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         return cell
     }
     
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchText.isEmpty {
-//            let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
-//        } else {
-//            let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true).filter("tags.tagName CONTAINS %@", searchText)
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        filteredTags = searchText.isEmpty ? allTags() : allTags().filter { (item: String) -> Bool in
+//            return item.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
 //        }
-//        self.searchTagsCollectionView.reloadData()
-//    }
+        if searchText.isEmpty {
+            let searchedTags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
+            filteredTags = searchedTags
+        } else {
+            let searchedTags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true).filter("tagName contains[c] %@", searchText)
+            filteredTags = searchedTags
+        }
+        self.searchTagsCollectionView.reloadData()
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
@@ -241,7 +247,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "SearchToResults" {
             let toSearchResultsViewController = segue.destination as! SearchResultsViewController
-            toSearchResultsViewController.passedScreenshotImageSet = screenshotImageSet
             toSearchResultsViewController.passedScreenshotIDs = selectedScreenshotsIDs
         }
     }

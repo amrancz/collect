@@ -19,8 +19,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     var screenshotUUID: String?
     var screenshotPosition: Int?
-    var screenshotImageSet: [UIImage?] = []
-        
+    var screenshotsToPass: Results<Screenshot>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
@@ -34,6 +34,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         self.searchButton.layer.shadowOpacity = 0.6
         self.searchButton.layer.masksToBounds = false
         self.getScreenshotCount()
+        self.populateScreenshotsToPass()
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCollection(_:)), name: Notification.Name(rawValue: "reloadCollection"), object: nil)
         print(Realm.Configuration.defaultConfiguration.fileURL!)
@@ -64,6 +65,13 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             }
         })
     }
+    
+    func populateScreenshotsToPass() {
+        let realm = try! Realm()
+        let screenshots = realm.objects(Screenshot.self)
+        screenshotsToPass = screenshots
+    }
+    
     
     //MARK: UIImagePicker to add screenshots
     
@@ -135,7 +143,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         if let imageData = UIImage(contentsOfFile: screenshotPath) {
             cell.imageView.contentMode = .scaleAspectFit
             cell.imageView.image = imageData
-            screenshotImageSet.append(imageData)
         }
         return cell
     }
@@ -155,6 +162,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedScreenshotUUID = screenshotUUID
             toDetailViewController.passedScreenshotPosition = screenshotPosition
+            toDetailViewController.passedScreenshots = screenshotsToPass
         }
     }
 }

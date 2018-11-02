@@ -24,6 +24,7 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var passedScreenshotPosition: Int?
     var screenshotIDSet: [String?] = []
     var screenshotImageSet: [UIImage?] = []
+    var passedScreenshots: Results<Screenshot>!
     
     //MARK: Setup slideshow
     @IBOutlet weak var screenshotSlideshow: ImageSlideshow!
@@ -38,10 +39,10 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         return documentsDirectoryURL
     }
     
+    
     func populateData() {
-        let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)
-        for screenshot in screenshots {
+        let screenshots = passedScreenshots
+        for screenshot in screenshots! {
             let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
             let screenshotPath = screenshotURL.path
             screenshotIDSet.append(screenshot.screenshotID)
