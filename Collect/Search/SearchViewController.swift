@@ -22,7 +22,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     
     var selectedScreenshotsIDs: [String] = []
     var screenshotImageSet: [UIImage?] = []
-    
+    var screenshotsToPass: Results<Screenshot>!
+
     var filteredTags: Results<Tag>!
     
     func getDocumentsDirectory() -> URL {
@@ -30,18 +31,19 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         return documentsDirectoryURL
     }
     
-    func screenshotsToPass(){
+    func getScreenshots() -> Results<Screenshot> {
         let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self).filter("screenshotID IN %@", selectedScreenshotsIDs)
-        for screenshot in screenshots {
-            let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
-            let screenshotPath = screenshotURL.path
-            let screenshotID = screenshot.screenshotID
-            selectedScreenshotsIDs.append(screenshotID)
-            if let imageData = UIImage(contentsOfFile: screenshotPath) {
-                screenshotImageSet.append(imageData)
-            }
-        }
+        return screenshots
+//        for screenshot in screenshots {
+//            let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
+//            let screenshotPath = screenshotURL.path
+//            let screenshotID = screenshot.screenshotID
+//            selectedScreenshotsIDs.append(screenshotID)
+//            if let imageData = UIImage(contentsOfFile: screenshotPath) {
+//                screenshotImageSet.append(imageData)
+//            }
+//        }
     }
     
     var isSearchActive:Bool = false
@@ -239,7 +241,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     }
     
     @IBAction func searchButtonTapped(_ sender: Any) {
-        self.screenshotsToPass()
+        screenshotsToPass = self.getScreenshots()
         print(self.screenshotImageSet)
         performSegue(withIdentifier: "SearchToResults", sender: self)
     }
@@ -248,6 +250,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         if segue.identifier == "SearchToResults" {
             let toSearchResultsViewController = segue.destination as! SearchResultsViewController
             toSearchResultsViewController.passedScreenshotIDs = selectedScreenshotsIDs
+            toSearchResultsViewController.screenshotsToPass = screenshotsToPass
         }
     }
     

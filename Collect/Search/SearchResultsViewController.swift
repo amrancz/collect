@@ -27,7 +27,7 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     
     var screenshotPosition: Int?
     var passedScreenshotIDs: [String] = []
-    var passedScreenshotImageSet: [UIImage?] = []
+//    var passedScreenshotImageSet: [UIImage?] = []
     
     var screenshotsToPass: Results<Screenshot>!
     
@@ -107,7 +107,7 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedScreenshotUUID = screenshotUUID
             toDetailViewController.passedScreenshotPosition = screenshotPosition
-            toDetailViewController.screenshotIDSet = passedScreenshotIDs
+//            toDetailViewController.screenshotIDSet = passedScreenshotIDs
             toDetailViewController.passedScreenshots = screenshotsToPass
         }
     }
