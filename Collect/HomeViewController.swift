@@ -154,11 +154,9 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let toDetailNavigationController = segue.destination as! UINavigationController
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedScreenshotUUID = screenshotUUID
-            toDetailViewController.passedScreenshotImageSet = screenshotImageSet
             toDetailViewController.passedScreenshotPosition = screenshotPosition
         }
     }
-    
 }
 
 extension HomeViewController: TBEmptyDataSetDataSource, TBEmptyDataSetDelegate {

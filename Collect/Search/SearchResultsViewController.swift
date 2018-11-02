@@ -103,7 +103,6 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
             let toDetailNavigationController = segue.destination as! UINavigationController
             let toDetailViewController = toDetailNavigationController.viewControllers.first as! DetailViewController
             toDetailViewController.passedScreenshotUUID = screenshotUUID
-            toDetailViewController.passedScreenshotImageSet = passedScreenshotImageSet
             toDetailViewController.passedScreenshotPosition = screenshotPosition
             toDetailViewController.screenshotIDSet = passedScreenshotIDs
         }

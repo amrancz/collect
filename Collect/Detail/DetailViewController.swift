@@ -23,7 +23,7 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var passedScreenshotUUID: String?
     var passedScreenshotPosition: Int?
     var screenshotIDSet: [String?] = []
-    var passedScreenshotImageSet: [UIImage?] = []
+    var screenshotImageSet: [UIImage?] = []
     
     //MARK: Setup slideshow
     @IBOutlet weak var screenshotSlideshow: ImageSlideshow!
@@ -33,9 +33,20 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     
     @IBOutlet weak var screenshotDetail: UIImageView!
     
-    func populateSlideshow() {
-        for screenshot in passedScreenshotImageSet {
-            let img = screenshot
+    func getDocumentsDirectory() -> URL {
+        let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return documentsDirectoryURL
+    }
+    
+    func populateData() {
+        let realm = try! Realm()
+        let screenshots = realm.objects(Screenshot.self)
+        for screenshot in screenshots {
+            let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
+            let screenshotPath = screenshotURL.path
+            screenshotIDSet.append(screenshot.screenshotID)
+            let img = UIImage(contentsOfFile: screenshotPath)
+            screenshotImageSet.append(img)
             imageSource.append(ImageSource(image: img!))
         }
     }
@@ -48,18 +59,16 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         
         self.navigationController?.isNavigationBarHidden = true
         self.modalPresentationCapturesStatusBarAppearance = true
-        self.populateSlideshow()
+        self.populateData()
         self.screenshotSlideshow.setImageInputs(imageSource)
+        self.screenshotSlideshow.circular = false
         self.screenshotSlideshow.setCurrentPage(passedScreenshotPosition!, animated: false)
         self.screenshotSlideshow.pageIndicator = nil
         print("current page:", screenshotSlideshow.currentPage)
-        getScreenshotIDs()
         self.screenshotSlideshow.currentPageChanged = { page in
             print("current page:", page)
-            // TO-DO: Fix "Index out of range"
+            self.passedScreenshotPosition = page
             self.passedScreenshotUUID = self.screenshotIDSet[page]
-            print("screenshotID is:", self.passedScreenshotUUID as Any)
-
         }
     }
     
@@ -69,15 +78,6 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         self.setNeedsStatusBarAppearanceUpdate()
     }
     
-    func getScreenshotIDs() {
-        let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)
-        for screenshot in screenshots {
-            let id = screenshot.screenshotID
-            screenshotIDSet.append(id)
-        }
-        print(screenshotIDSet)
-    }
     
     //MARK: Toggle UI on tap
     
@@ -124,21 +124,20 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     @IBOutlet var bottomToolbar: UIView!
     @IBOutlet weak var shareButton: NSLayoutConstraint!
     @IBOutlet weak var addTags: UIButton!
-    
-    let viewController = MainStoryboard.viewController.instantiate()
-    let transitionDelegate = TagsModalTransitioningDelegate()
 
     @IBAction func openTags(_ sender: Any) {
-        viewController.transitioningDelegate = self.transitionDelegate
+        let viewController = MainStoryboard.viewController.instantiate()
+        let transitionDelegate = TagsModalTransitioningDelegate()
+        viewController.transitioningDelegate = transitionDelegate
         viewController.modalPresentationStyle = .custom
         viewController.passedScreenshotUUID = passedScreenshotUUID
         UIView.animate(withDuration: 0.3, animations: {
-            self.present(self.viewController, animated: true, completion: nil)
+            self.present(viewController, animated: true, completion: nil)
         })
     }
     
     @IBAction func shareScreenshot(_ sender: Any) {
-        let imageToShare = passedScreenshotImageSet[passedScreenshotPosition!] as Any
+        let imageToShare = screenshotImageSet[passedScreenshotPosition!] as Any
         let activityViewController = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = self.view
         self.present(activityViewController, animated: true) {
@@ -153,8 +152,6 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
                 realm.delete(screenshot)
             }
             self.screenshotIDSet.remove(at: self.screenshotSlideshow.currentPage)
-            self.passedScreenshotImageSet.removeAll()
-            self.populateSlideshow()
             NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
             self.dismiss(animated: true)
         }

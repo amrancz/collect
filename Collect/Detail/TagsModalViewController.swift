@@ -39,13 +39,6 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
         self.sizingCell = (tagCellNib.instantiate(withOwner: nil, options: nil)as NSArray).firstObject as! TagCell?
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print(self.passedScreenshotUUID as Any)
-        print(self.selectedScreenshot!.first?.tags as Any)
-
-    }
-    
     func usedTags() -> List<Tag> {
         let screenshot = realm.objects(Screenshot.self).filter("screenshotID = %@", self.passedScreenshotUUID!).first
         let usedTags = screenshot?.tags
