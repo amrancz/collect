@@ -13,7 +13,7 @@ import RealmSwift
 
 private let reuseIdentifier = "tagCellIdentifier"
 
-class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResultsUpdating, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
+class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var searchTagsCollectionView: UICollectionView!
@@ -56,7 +56,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         self.keepCancelButtonActive()
         self.navigationItem.titleView = self.searchBar
         self.searchBar.delegate = self
-        self.selectedTags.removeAll()
         self.searchController.hidesNavigationBarDuringPresentation = false
         self.searchController.searchBar.becomeFirstResponder()
         self.searchBar.returnKeyType = .done
@@ -87,12 +86,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         self.searchBar.endEditing(true)
         self.searchBar.resignFirstResponder()
         self.keepCancelButtonActive()
+        self.selectedTags.removeAll()
     }
 
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        return print("hic sunt leones")
-    }
     
     func resultsCount() -> Int {
         let array = self.selectedScreenshotsIDs
@@ -133,19 +129,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     }
     
     func configureCell(_ cell: TagCell, forIndexPath indexPath: IndexPath) {
-        //        if ((indexPath.item) < self.usedTags().count) {
-        //            let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true).filter("ANY linkedScreenshots.tags IN %@", self.usedTags() )
-        //            let tagInfo = tags[indexPath.item]
-        //            cell.isSelected = true
-        //            tagsModalCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-        //            cell.tagCellLabel.text = tagInfo.tagName
-        //        } else  {
-        //            let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true).filter("NONE linkedScreenshots.tags IN %@", self.usedTags() )
-        //            let tagInfo = tags[indexPath.item]
-        //            cell.isSelected = false
-        //            tagsModalCollectionView.deselectItem(at: indexPath, animated: false)
-        //            cell.tagCellLabel.text = tagInfo.tagName
-        //        }
         let tagInfo = filteredTags[indexPath.row]
         cell.tagCellLabel.text = tagInfo.tagName
         if self.selectedTags.contains(tagInfo.tagName) {
