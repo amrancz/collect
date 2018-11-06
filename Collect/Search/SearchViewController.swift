@@ -20,11 +20,19 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var searchButtonContainer: UIView!
     
+    var selectedTags: [String] = []
+    
+    let realm = try! Realm()
+    
     var selectedScreenshotsIDs: [String] = []
-    var screenshotImageSet: [UIImage?] = []
     var screenshotsToPass: Results<Screenshot>!
 
     var filteredTags: Results<Tag>!
+    
+    func allTags() -> Results<Tag> {
+        let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
+        return tags
+    }
     
     func getDocumentsDirectory() -> URL {
         let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -32,23 +40,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
     }
     
     func getScreenshots() -> Results<Screenshot> {
-        let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self).filter("screenshotID IN %@", selectedScreenshotsIDs)
         return screenshots
-//        for screenshot in screenshots {
-//            let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
-//            let screenshotPath = screenshotURL.path
-//            let screenshotID = screenshot.screenshotID
-//            selectedScreenshotsIDs.append(screenshotID)
-//            if let imageData = UIImage(contentsOfFile: screenshotPath) {
-//                screenshotImageSet.append(imageData)
-//            }
-//        }
     }
     
     var isSearchActive:Bool = false
     
-    let realm = try! Realm()
     let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet weak var tagsFlowLayout: TagsFlowLayout!
@@ -59,6 +56,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         self.keepCancelButtonActive()
         self.navigationItem.titleView = self.searchBar
         self.searchBar.delegate = self
+        self.selectedTags.removeAll()
         self.searchController.hidesNavigationBarDuringPresentation = false
         self.searchController.searchBar.becomeFirstResponder()
         self.searchBar.returnKeyType = .done
@@ -90,23 +88,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         self.searchBar.resignFirstResponder()
         self.keepCancelButtonActive()
     }
-    
-    
-//    @objc func keyboardWillShow(notification: NSNotification) {
-//        if let userInfo = notification.userInfo {
-//            UIView.animate(withDuration: 0.3, animations: { () -> Void in
-//                self.searchBar.layoutIfNeeded()
-//            })
-//        }
-//    }
-//
-//    @objc func keyboardWillHide(notification: NSNotification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-//            if self.searchButton.frame.origin.y != UIScreen.main.bounds.height - self.searchButton.frame.height {
-//                self.searchButton.frame.origin.y = self.searchButton.frame.origin.y - keyboardSize.height
-//            }
-//        }
-//    }
+
     
     func updateSearchResults(for searchController: UISearchController) {
         return print("hic sunt leones")
@@ -134,7 +116,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
             self.searchButton.isEnabled = true
             self.searchButton.layer.backgroundColor = #colorLiteral(red: 0, green: 0.4, blue: 0.8274509804, alpha: 1)
             self.searchButtonContainer.layer.backgroundColor = #colorLiteral(red: 0, green: 0.4, blue: 0.8274509804, alpha: 1)
-
         }
     }
     
@@ -149,11 +130,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
             cancelButton.isEnabled = true
         }
-    }
-    
-    func allTags() -> Results<Tag> {
-        let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
-        return tags
     }
     
     func configureCell(_ cell: TagCell, forIndexPath indexPath: IndexPath) {
@@ -172,6 +148,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         //        }
         let tagInfo = filteredTags[indexPath.row]
         cell.tagCellLabel.text = tagInfo.tagName
+        if self.selectedTags.contains(tagInfo.tagName) {
+            cell.isSelected = true
+        } else {
+            cell.isSelected = false
+        }
     }
     
     func widthOfLabel(text:String, font:UIFont) -> CGFloat {
@@ -206,13 +187,41 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         return cell
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedTag = filteredTags[indexPath.item]
+//        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
+        let screenshots = realm.objects(Screenshot.self).filter("ANY tags == %@", selectedTag)
+        for screenshot in screenshots {
+            self.selectedScreenshotsIDs.append(screenshot.screenshotID)
+            self.selectedTags.append(selectedTag.tagName)
+        }
+        self.setupSearchButton()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let selectedTag = filteredTags[indexPath.item]
+//        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
+        let screenshots = realm.objects(Screenshot.self).filter("ANY tags == %@", selectedTag)
+        for screenshot in screenshots {
+            if let index = self.selectedScreenshotsIDs.index(where: { $0 == "\(screenshot.screenshotID)"}) {
+                self.selectedScreenshotsIDs.remove(at: index)
+            }
+            if let tagIndex = self.selectedTags.index(where: { $0 == "\(selectedTag.tagName)"}) {
+                self.selectedTags.remove(at: tagIndex)
+            }
+        }
+        self.setupSearchButton()
+    }
+    
+    //MARK: Search Bar
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        filteredTags = searchText.isEmpty ? allTags() : allTags().filter { (item: String) -> Bool in
-//            return item.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
-//        }
         if searchText.isEmpty {
             let searchedTags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
             filteredTags = searchedTags
+            self.selectedScreenshotsIDs.removeAll()
+            self.setupSearchButton()
         } else {
             let searchedTags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true).filter("tagName contains[c] %@", searchText)
             filteredTags = searchedTags
@@ -220,29 +229,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
         self.searchTagsCollectionView.reloadData()
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
-        let screenshots = realm.objects(Screenshot.self).filter("ANY tags == %@", selectedTag)
-        for screenshot in screenshots {
-            self.selectedScreenshotsIDs.append(screenshot.screenshotID)
-        }
-        self.setupSearchButton()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
-        let screenshots = realm.objects(Screenshot.self).filter("ANY tags == %@", selectedTag)
-        for screenshot in screenshots {
-            if let index = self.selectedScreenshotsIDs.index(where: { $0 == "\(screenshot.screenshotID)"}) {
-                self.selectedScreenshotsIDs.remove(at: index)
-            }
-        }
-        self.setupSearchButton()
-    }
+    //MARK: Perform search
     
     @IBAction func searchButtonTapped(_ sender: Any) {
         screenshotsToPass = self.getScreenshots()
-        print(self.screenshotImageSet)
         performSegue(withIdentifier: "SearchToResults", sender: self)
     }
     
@@ -253,6 +243,5 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResul
             toSearchResultsViewController.screenshotsToPass = screenshotsToPass
         }
     }
-    
 }
 
