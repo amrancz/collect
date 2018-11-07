@@ -51,16 +51,21 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     func usedTags() -> List<Tag> {
         let screenshot = realm.objects(Screenshot.self).filter("screenshotID = %@", self.passedScreenshotUUID!).first
         let usedTags = screenshot?.tags
+        usedTagIDs.removeAll()
+        for tag in usedTags! {
+            self.usedTagIDs.append(tag.tagID)
+        }
         return usedTags!
     }
     
+    var usedTagIDs: [String] = []
+    
     func unusedTags() -> Results<Tag> {
-//        let allTags = realm.objects(Tag.self)//.filter("NONE linkedScreenshots.tags IN %@", self.usedTags() )
 //        let converted = allTags.reduce(List<Tag>()) { (list, tag) -> List<Tag> in
 //            list.append(tag)
 //            return list
 //        }
-        let unused = realm.objects(Tag.self).filter("NONE in %@", self.usedTags())
+        let unused = realm.objects(Tag.self).filter("NOT tagID IN %@", self.usedTagIDs)
 //        let listOfUnused = converted.filter("NONE in %@", self.usedTags())
         return unused
     }
@@ -88,7 +93,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
             print(usedTags().count)
             return usedTags().count
         } else if section == 1 {
-            print(unusedTags().count)
+//            print(unusedTags().count)
             return unusedTags().count
         }
         return 0
