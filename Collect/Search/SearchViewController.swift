@@ -184,7 +184,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let selectedTag = filteredTags[indexPath.item]
-//        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
         let screenshots = realm.objects(Screenshot.self).filter("ANY tags == %@", selectedTag)
         for screenshot in screenshots {
             if let index = self.selectedScreenshotsIDs.index(where: { $0 == "\(screenshot.screenshotID)"}) {

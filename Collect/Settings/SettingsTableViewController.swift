@@ -33,7 +33,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        sendFeedback()
+//        sendFeedback()
     }
     
 }

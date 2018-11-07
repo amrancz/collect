@@ -19,6 +19,14 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     var passedScreenshotUUID: String?
     var selectedScreenshot: Results<Screenshot>?
     
+    var tagNames: [String] = []
+    
+    func allTags() {
+        let tags = realm.objects(Tag.self)
+        for tag in tags {
+            self.tagNames.append(tag.tagName.lowercased())
+        }
+    }
     
     @IBOutlet var tagsModalCollectionView: UICollectionView!
     @IBOutlet weak var tagsFlowLayout: TagsFlowLayout!
@@ -30,6 +38,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        allTags()
         selectedScreenshot = realm.objects(Screenshot.self).filter("screenshotID == %@", passedScreenshotUUID!)
         let tagCellNib = UINib(nibName: "TagCell", bundle: nil)
         self.tagsModalCollectionView.register(tagCellNib, forCellWithReuseIdentifier: reuseIdentifier)
@@ -46,8 +55,14 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func unusedTags() -> Results<Tag> {
-        let unusedTags = realm.objects(Tag.self).filter("NONE linkedScreenshots.tags IN %@", self.usedTags() )
-        return unusedTags
+//        let allTags = realm.objects(Tag.self)//.filter("NONE linkedScreenshots.tags IN %@", self.usedTags() )
+//        let converted = allTags.reduce(List<Tag>()) { (list, tag) -> List<Tag> in
+//            list.append(tag)
+//            return list
+//        }
+        let unused = realm.objects(Tag.self).filter("NONE in %@", self.usedTags())
+//        let listOfUnused = converted.filter("NONE in %@", self.usedTags())
+        return unused
     }
     
     func tagsCount() -> Int {
@@ -70,8 +85,10 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
+            print(usedTags().count)
             return usedTags().count
         } else if section == 1 {
+            print(unusedTags().count)
             return unusedTags().count
         }
         return 0
@@ -142,16 +159,25 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
         }
         let addTagAction = UIAlertAction(title: "Add tag", style: .default){ (action:UIAlertAction!) in
-            let realm = try! Realm()
             let uuid = UUID().uuidString
             let tag = Tag()
             tag.tagID = uuid
             let textField = addTagAlertController.textFields?.first
             tag.tagName = (textField?.text!)!
             let screenshotToSaveTo = self.selectedScreenshot!.first
-            try! realm.write {
-                realm.add(tag, update: true)
-                screenshotToSaveTo?.tags.append(tag)
+            if self.tagNames.contains(where: {$0.caseInsensitiveCompare(tag.tagName) == .orderedSame}) {
+                let tagToSave = self.realm.objects(Tag.self).filter("tagName =[c] %@", tag.tagName).first
+                try! self.realm.write {
+                    screenshotToSaveTo!.tags.append(tagToSave!)
+                }
+                self.tagNames.append(tag.tagName)
+            } else {
+                try! self.realm.write {
+                    self.realm.add(tag, update: true)
+                    screenshotToSaveTo?.tags.append(tag)
+                }
+                self.tagNames.append(tag.tagName)
+                print ("tag already exists")
             }
             self.tagsModalCollectionView.reloadData()
         }

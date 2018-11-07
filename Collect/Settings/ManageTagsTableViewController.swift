@@ -15,19 +15,32 @@ import TBEmptyDataSet
 class ManageTagsTableViewController: UITableViewController {
     
     @IBOutlet var tagsTableView: UITableView!
+    var tagNames: [String] = []
+    let realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.emptyDataSetDataSource = self
         tableView.emptyDataSetDelegate = self
+        allTags()
         styleTableView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        tagNames.removeAll()
+    }
+    
     func tagsCount() -> Int {
-        let realm = try! Realm()
         let tags = realm.objects(Tag.self)
         let tagsCount = tags.count
         return tagsCount
+    }
+    
+    func allTags() {
+        let tags = realm.objects(Tag.self)
+        for tag in tags {
+            self.tagNames.append(tag.tagName)
+        }
     }
     
     func styleTableView() {
@@ -50,21 +63,33 @@ class ManageTagsTableViewController: UITableViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
         }
         let addTagAction = UIAlertAction(title: "Add tag", style: .default){ (action:UIAlertAction!) in
-            let realm = try! Realm()
             let uuid = UUID().uuidString
             let tag = Tag()
             tag.tagID = uuid
             let textField = addTagAlertController.textFields?.first
             tag.tagName = (textField?.text!)!
-            try! realm.write {
-                realm.add(tag, update: true)
-                print (tag.tagName)
+            if self.tagNames.contains(where: {$0.caseInsensitiveCompare(tag.tagName) == .orderedSame}) {
+                print("tag already exists")
+                self.tagAlreadyExsits()
+            } else {
+                try! self.realm.write {
+                    self.realm.add(tag, update: true)
+                }
+                self.tagNames.append(tag.tagName)
             }
             self.tableView.reloadData()
         }
         addTagAlertController.addAction(cancelAction)
         addTagAlertController.addAction(addTagAction)
         self.present(addTagAlertController, animated: true, completion: nil)
+    }
+    
+    func tagAlreadyExsits() {
+        let tagAlreadyExsitsController = UIAlertController(title: "This tag already exists", message: "Maybe you wanted to add a different one?", preferredStyle: .alert)
+        let dismissAction = UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction!) in
+        }
+        tagAlreadyExsitsController.addAction(dismissAction)
+        self.present(tagAlreadyExsitsController, animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,15 +122,17 @@ class ManageTagsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         self.tableView.beginUpdates()
-        let realm = try! Realm()
-        let tag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
-        try! realm.write {
-            realm.delete(tag)
-            realm.refresh()
+        let tag = self.realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
+        try! self.realm.write {
+            self.realm.delete(tag)
+            self.realm.refresh()
+            
         }
+        tagNames.removeAll()
         self.tableView.deleteRows(at: [indexPath], with: .fade)
         self.tableView.endUpdates()
         styleTableView()
+        allTags()
     }
 }
 
