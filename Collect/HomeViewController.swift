@@ -55,17 +55,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         // Dispose of any resources that can be recreated.
     }
     
-    func getScreenshotCount() {
-        let albumsPhoto:PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
-        
-        albumsPhoto.enumerateObjects({(collection, index, object) in
-            if collection.localizedTitle == "Screenshots"{
-                let photoInAlbum = PHAsset.fetchAssets(in: collection, options: nil)
-                print(photoInAlbum.count) //Screenshots albums count
-            }
-        })
-    }
-    
     func populateScreenshotsToPass() {
         let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self)
@@ -81,9 +70,25 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         var configure = TLPhotosPickerConfigure()
         configure.allowedLivePhotos = false
         configure.usedCameraButton = false
+        configure.allowedLivePhotos = false
+        configure.allowedVideoRecording = false
+        configure.fetchCollectionTypes?.removeAll()
+        configure.fetchCollectionTypes?.append((PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumScreenshots))
         
         self.present(pickerVC, animated: true, completion: nil)
     }
+    
+    func getScreenshotCount() {
+        let albumsPhoto:PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        
+        albumsPhoto.enumerateObjects({(collection, index, object) in
+            if collection.localizedTitle == "Screenshots"{
+                let photoInAlbum = PHAsset.fetchAssets(in: collection, options: nil)
+                print(photoInAlbum.count) //Screenshots albums count
+            }
+        })
+    }
+    
     
     func dismissPhotoPicker(withPHAssets: [PHAsset]) {
         for asset in withPHAssets {
