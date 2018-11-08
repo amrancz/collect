@@ -61,10 +61,13 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         self.navigationController?.isNavigationBarHidden = true
         self.modalPresentationCapturesStatusBarAppearance = true
         self.populateData()
+        
         self.screenshotSlideshow.setImageInputs(imageSource)
         self.screenshotSlideshow.circular = false
         self.screenshotSlideshow.setCurrentPage(passedScreenshotPosition!, animated: false)
         self.screenshotSlideshow.pageIndicator = nil
+//        self.screenshotSlideshow.zoomEnabled = true
+        
         print("current page:", screenshotSlideshow.currentPage)
         self.screenshotSlideshow.currentPageChanged = { page in
             print("current page:", page)
