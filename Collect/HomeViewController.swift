@@ -67,7 +67,9 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     @IBAction func addScreenshots(_sender: Any) {
         let pickerVC = TLPhotosPickerViewController()
         pickerVC.delegate = self
+        pickerVC.configure.selectedColor = #colorLiteral(red: 0, green: 0.4, blue: 0.8274509804, alpha: 1)
         pickerVC.configure.tapHereToChange = ""
+        pickerVC.configure.emptyMessage = "No screenshots"
         pickerVC.configure.allowedLivePhotos = false
         pickerVC.configure.usedCameraButton = false
         pickerVC.configure.allowedLivePhotos = false
