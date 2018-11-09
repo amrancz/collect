@@ -21,7 +21,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
             let email = MFMailComposeViewController()
             email.mailComposeDelegate = self
             email.setToRecipients(["collect.app@gmail.com"])
-            email.setSubject("Collect app: Feedback")
+            email.setSubject("Collect App: Feedback")
             present(email, animated: true)
         } else {
             print ("Couldn't open e-mail")
@@ -33,7 +33,9 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        sendFeedback()
+        if tableView.cellForRow(at: indexPath)?.textLabel?.text == "Send feedback" {
+            sendFeedback()
+        }
     }
     
 }

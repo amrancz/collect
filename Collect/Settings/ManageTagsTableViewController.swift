@@ -56,9 +56,9 @@ class ManageTagsTableViewController: UITableViewController {
     }
         
     @IBAction func addTag(_ sender: Any) {
-        let addTagAlertController = UIAlertController(title: "Add Tag", message: "Name this new tag", preferredStyle: .alert)
+        let addTagAlertController = UIAlertController(title: "Add Tag", message: "", preferredStyle: .alert)
         addTagAlertController.addTextField { (_ textField: UITextField) -> Void in
-            textField.placeholder = "Tag name"
+            textField.placeholder = "E.g. 'Form'"
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
         }
@@ -69,7 +69,6 @@ class ManageTagsTableViewController: UITableViewController {
             let textField = addTagAlertController.textFields?.first
             tag.tagName = (textField?.text!)!
             if self.tagNames.contains(where: {$0.caseInsensitiveCompare(tag.tagName) == .orderedSame}) {
-                print("tag already exists")
                 self.tagAlreadyExsits()
             } else {
                 try! self.realm.write {
@@ -93,18 +92,41 @@ class ManageTagsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print ("Current tagCount is \(tagsCount())")
         return tagsCount()
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tagsTableView.dequeueReusableCell(withIdentifier: "tagTableCell", for: indexPath)
+//        var cell: UITableViewCell? = tagsTableView.dequeueReusableCell(withIdentifier: "tagTableCell", for: indexPath)
+//        if (cell == nil) {
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "tagTableCell")
         let realm = try! Realm()
         let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
         let tagInfo = tags[indexPath.row]
         cell.textLabel?.text = tagInfo.tagName
+        cell.detailTextLabel?.text = "\(tagInfo.linkedScreenshots.count)×"
         styleTableView()
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let tag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.row]
+        let editTagAlertController = UIAlertController(title: "Edit Tag", message: "", preferredStyle: .alert)
+        editTagAlertController.addTextField { (_ textField: UITextField) -> Void in
+            textField.text = tag.tagName
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
+        }
+        let saveAction = UIAlertAction(title: "Save", style: .default) { (action: UIAlertAction!) in
+            let textField = editTagAlertController.textFields?.first
+            try! self.realm.write {
+                tag.tagName = (textField?.text)!
+            }
+            self.tableView.reloadData()
+        }
+        editTagAlertController.addAction(cancelAction)
+        editTagAlertController.addAction(saveAction)
+        self.present(editTagAlertController, animated: true, completion: nil)
+
     }
     
     @IBOutlet weak var editButton: UIBarButtonItem!

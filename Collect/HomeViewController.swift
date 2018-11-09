@@ -67,28 +67,24 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     @IBAction func addScreenshots(_sender: Any) {
         let pickerVC = TLPhotosPickerViewController()
         pickerVC.delegate = self
-        var configure = TLPhotosPickerConfigure()
-        configure.allowedLivePhotos = false
-        configure.usedCameraButton = false
-        configure.allowedLivePhotos = false
-        configure.allowedVideoRecording = false
-        configure.fetchCollectionTypes?.removeAll()
-        configure.fetchCollectionTypes?.append((PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumScreenshots))
-        
+        pickerVC.configure.tapHereToChange = ""
+        pickerVC.configure.allowedLivePhotos = false
+        pickerVC.configure.usedCameraButton = false
+        pickerVC.configure.allowedLivePhotos = false
+        pickerVC.configure.allowedVideoRecording = false
+        pickerVC.configure.allowedVideo = false
+        pickerVC.configure.fetchCollectionTypes = [(PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumScreenshots)]
         self.present(pickerVC, animated: true, completion: nil)
     }
     
     func getScreenshotCount() {
-        let albumsPhoto:PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        let albumsPhoto:PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumScreenshots, options: nil)
         
         albumsPhoto.enumerateObjects({(collection, index, object) in
-            if collection.localizedTitle == "Screenshots"{
                 let photoInAlbum = PHAsset.fetchAssets(in: collection, options: nil)
                 print(photoInAlbum.count) //Screenshots albums count
-            }
         })
     }
-    
     
     func dismissPhotoPicker(withPHAssets: [PHAsset]) {
         for asset in withPHAssets {

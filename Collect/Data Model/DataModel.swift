@@ -22,6 +22,6 @@ class Tag: Object {
     let linkedScreenshots = LinkingObjects(fromType: Screenshot.self, property: "tags")
     
     override class func primaryKey() -> String? {
-        return "tagName"
+        return "tagID"
     }
 }

@@ -35,9 +35,13 @@ class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDeleg
     @IBAction func addScreenshots(_sender: Any) {
         let pickerVC = TLPhotosPickerViewController()
         pickerVC.delegate = self
-        var configure = TLPhotosPickerConfigure()
-        configure.allowedLivePhotos = false
-        configure.usedCameraButton = false
+        pickerVC.configure.tapHereToChange = ""
+        pickerVC.configure.allowedLivePhotos = false
+        pickerVC.configure.usedCameraButton = false
+        pickerVC.configure.allowedLivePhotos = false
+        pickerVC.configure.allowedVideoRecording = false
+        pickerVC.configure.allowedVideo = false
+        pickerVC.configure.fetchCollectionTypes = [(PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumScreenshots)]
         self.present(pickerVC, animated: true, completion: nil)
     }
     
