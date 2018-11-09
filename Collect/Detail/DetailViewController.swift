@@ -25,33 +25,7 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var screenshotIDSet: [String?] = []
     var screenshotImageSet: [UIImage?] = []
     var passedScreenshots: Results<Screenshot>!
-    
-    //MARK: Setup slideshow
-    @IBOutlet weak var screenshotSlideshow: ImageSlideshow!
-    var imageSource: [ImageSource] = []
-    
-    @IBOutlet weak var toolbarContainer: UIView!
-    
-    @IBOutlet weak var screenshotDetail: UIImageView!
-    
-    func getDocumentsDirectory() -> URL {
-        let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        return documentsDirectoryURL
-    }
-    
-    
-    func populateData() {
-        let screenshots = passedScreenshots
-        for screenshot in screenshots! {
-            let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
-            let screenshotPath = screenshotURL.path
-            screenshotIDSet.append(screenshot.screenshotID)
-            let img = UIImage(contentsOfFile: screenshotPath)
-            screenshotImageSet.append(img)
-            imageSource.append(ImageSource(image: img!))
-        }
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,13 +38,12 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         
         self.screenshotSlideshow.setImageInputs(imageSource)
         self.screenshotSlideshow.circular = false
+        self.screenshotSlideshow.zoomEnabled = true
         self.screenshotSlideshow.setCurrentPage(passedScreenshotPosition!, animated: false)
         self.screenshotSlideshow.pageIndicator = nil
-//        self.screenshotSlideshow.zoomEnabled = true
-        
-        print("current page:", screenshotSlideshow.currentPage)
+        print("initial current page:", screenshotSlideshow.currentPage)
         self.screenshotSlideshow.currentPageChanged = { page in
-            print("current page:", page)
+            print("new current page:", page)
             self.passedScreenshotPosition = page
             self.passedScreenshotUUID = self.screenshotIDSet[page]
         }
@@ -82,6 +55,31 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         self.setNeedsStatusBarAppearanceUpdate()
     }
     
+    //MARK: Setup slideshow
+    
+    @IBOutlet weak var screenshotSlideshow: ImageSlideshow!
+    var imageSource: [ImageSource] = []
+    
+    @IBOutlet weak var toolbarContainer: UIView!
+    
+    @IBOutlet weak var screenshotDetail: UIImageView!
+    
+    func getDocumentsDirectory() -> URL {
+        let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return documentsDirectoryURL
+    }
+    
+    func populateData() {
+        let screenshots = passedScreenshots
+        for screenshot in screenshots! {
+            let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshot.screenshotFileName)
+            let screenshotPath = screenshotURL.path
+            screenshotIDSet.append(screenshot.screenshotID)
+            let img = UIImage(contentsOfFile: screenshotPath)
+            screenshotImageSet.append(img)
+            imageSource.append(ImageSource(image: img!))
+        }
+    }
     
     //MARK: Toggle UI on tap
     
@@ -168,6 +166,4 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
         }
     }
     
-    
 }
-

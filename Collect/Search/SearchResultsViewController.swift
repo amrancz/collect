@@ -32,7 +32,7 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     
     func searchedScreenshots() -> Results<Screenshot> {
         let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self).filter("screenshotID IN %@", passedScreenshotIDs)
+        let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false).filter("screenshotID IN %@", passedScreenshotIDs)
         screenshotsToPass = screenshots
         return screenshots
     }

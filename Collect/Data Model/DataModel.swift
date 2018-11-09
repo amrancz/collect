@@ -13,6 +13,7 @@ import RealmSwift
 class Screenshot: Object {
     @objc dynamic var screenshotID = ""
     @objc dynamic var screenshotFileName = ""
+    @objc dynamic var dateAdded = ""
     let tags = List<Tag>()
 }
 

@@ -21,8 +21,23 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     var screenshotPosition: Int?
     var screenshotsToPass: Results<Screenshot>!
     
+    let realm = try! Realm()
+
+    
+    func timeStamp() -> String {
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let timeStamp = Date().timeIntervalSince1970
+        let timeInterval = TimeInterval(timeStamp)
+        let time = Date(timeIntervalSince1970: TimeInterval(timeInterval))
+        let timeString = formatter.string(from: time)
+        return timeString
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(timeStamp())
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         screenshotCollectionHome.delegate = self
         screenshotCollectionHome.dataSource = self
@@ -33,7 +48,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         self.searchButton.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.4)
         self.searchButton.layer.shadowOpacity = 0.6
         self.searchButton.layer.masksToBounds = false
-        self.getScreenshotCount()
         self.populateScreenshotsToPass()
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCollection(_:)), name: Notification.Name(rawValue: "reloadCollection"), object: nil)
@@ -57,7 +71,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     func populateScreenshotsToPass() {
         let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)
+        let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false)
         screenshotsToPass = screenshots
     }
     
@@ -75,17 +89,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         pickerVC.configure.allowedLivePhotos = false
         pickerVC.configure.allowedVideoRecording = false
         pickerVC.configure.allowedVideo = false
-        pickerVC.configure.fetchCollectionTypes = [(PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumScreenshots)]
+        pickerVC.configure.fetchCollectionTypes = [(PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumScreenshots),(PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumUserLibrary)]
         self.present(pickerVC, animated: true, completion: nil)
-    }
-    
-    func getScreenshotCount() {
-        let albumsPhoto:PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumScreenshots, options: nil)
-        
-        albumsPhoto.enumerateObjects({(collection, index, object) in
-                let photoInAlbum = PHAsset.fetchAssets(in: collection, options: nil)
-                print(photoInAlbum.count) //Screenshots albums count
-        })
     }
     
     func dismissPhotoPicker(withPHAssets: [PHAsset]) {
@@ -105,6 +110,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             try! imageData?.write(to: writePath as URL, options: [.atomic])
             screenshot.screenshotID = uuid
             screenshot.screenshotFileName = "\(uuid).png"
+            screenshot.dateAdded = timeStamp()
             let realm = try! Realm()
             try! realm.write {
                 realm.add(screenshot)
@@ -140,7 +146,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     func collectionView(_ collectionView: UICollectionView, cellForItemAt cellForRowAtIndexPath: IndexPath) -> UICollectionViewCell {
         let cell = screenshotCollectionHome.dequeueReusableCell(withReuseIdentifier: "screenshotCell", for: cellForRowAtIndexPath) as! ScreenshotCell
         let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)[cellForRowAtIndexPath.row]
+        let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false)[cellForRowAtIndexPath.row]
         let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshots.screenshotFileName)
         let screenshotPath = screenshotURL.path
         if let imageData = UIImage(contentsOfFile: screenshotPath) {
@@ -152,7 +158,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let realm = try! Realm()
-        let screenshots = realm.objects(Screenshot.self)[indexPath.row]
+        let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false)[indexPath.row]
         screenshotUUID = screenshots.screenshotID
         self.screenshotPosition = indexPath.item
         print(screenshotPosition!)

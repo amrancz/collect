@@ -31,6 +31,17 @@ class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDeleg
         self.importButton.layer.masksToBounds = false
     }
     
+    func timeStamp() -> String {
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let timeStamp = Date().timeIntervalSince1970
+        let timeInterval = TimeInterval(timeStamp)
+        let time = Date(timeIntervalSince1970: TimeInterval(timeInterval))
+        let timeString = formatter.string(from: time)
+        return timeString
+    }
+    
     //MARK: UIImagePicker to add screenshots
     @IBAction func addScreenshots(_sender: Any) {
         let pickerVC = TLPhotosPickerViewController()
@@ -43,7 +54,7 @@ class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDeleg
         pickerVC.configure.allowedLivePhotos = false
         pickerVC.configure.allowedVideoRecording = false
         pickerVC.configure.allowedVideo = false
-        pickerVC.configure.fetchCollectionTypes = [(PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumScreenshots)]
+        pickerVC.configure.fetchCollectionTypes = [(PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumScreenshots),(PHAssetCollectionType.smartAlbum, PHAssetCollectionSubtype.smartAlbumUserLibrary)]
         self.present(pickerVC, animated: true, completion: nil)
     }
     
@@ -64,6 +75,7 @@ class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDeleg
             try! imageData?.write(to: writePath as URL, options: [.atomic])
             screenshot.screenshotID = uuid
             screenshot.screenshotFileName = "\(uuid).png"
+            screenshot.dateAdded = timeStamp()
             let realm = try! Realm()
             try! realm.write {
                 realm.add(screenshot)
