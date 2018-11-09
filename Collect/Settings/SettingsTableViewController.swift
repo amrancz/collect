@@ -24,7 +24,11 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
             email.setSubject("Collect App: Feedback")
             present(email, animated: true)
         } else {
-            print ("Couldn't open e-mail")
+            let errorAlert = UIAlertController(title: "Couldn't open e-mail", message: "", preferredStyle: .alert)
+            let dismissAction = UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction!) in
+            }
+            errorAlert.addAction(dismissAction)
+            self.present(errorAlert, animated: true, completion: nil)
         }
     }
     
@@ -36,6 +40,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
         if tableView.cellForRow(at: indexPath)?.textLabel?.text == "Send feedback" {
             sendFeedback()
         }
+        self.tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }

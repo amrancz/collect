@@ -125,6 +125,7 @@ class ManageTagsTableViewController: UITableViewController {
         }
         editTagAlertController.addAction(cancelAction)
         editTagAlertController.addAction(saveAction)
+        tableView.deselectRow(at: indexPath, animated: true)
         self.present(editTagAlertController, animated: true, completion: nil)
 
     }
