@@ -84,7 +84,7 @@ class ManageTagsTableViewController: UITableViewController {
     }
     
     func tagAlreadyExsits() {
-        let tagAlreadyExsitsController = UIAlertController(title: "This tag already exists", message: "Maybe you wanted to add a different one?", preferredStyle: .alert)
+        let tagAlreadyExsitsController = UIAlertController(title: "This tag already exists", message: "Try to add a different one", preferredStyle: .alert)
         let dismissAction = UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction!) in
         }
         tagAlreadyExsitsController.addAction(dismissAction)

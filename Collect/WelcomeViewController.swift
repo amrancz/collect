@@ -87,11 +87,9 @@ class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDeleg
         self.importDone()
     }
     
-    
     func importDone() {
         UserDefaults.standard.set(true, forKey: "firstImport")
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))
-        //        self.performSegue(withIdentifier: "WelcomeToHome", sender: self)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let homeVC = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
         self.present(homeVC, animated: true, completion: nil)

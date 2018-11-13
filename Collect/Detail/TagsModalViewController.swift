@@ -157,7 +157,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     @IBAction func addTag(_ sender: Any) {
-        let addTagAlertController = UIAlertController(title: "Add Tag", message: "Name this new tag", preferredStyle: .alert)
+        let addTagAlertController = UIAlertController(title: "Add Tag", message: "", preferredStyle: .alert)
         addTagAlertController.addTextField { (_ textField: UITextField) -> Void in
             textField.placeholder = "Tag name"
         }

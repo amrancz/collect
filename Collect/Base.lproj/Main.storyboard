@@ -690,10 +690,10 @@
                                         <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Collect makes it easy to organize your screenshots." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Qn-bZ-GIM">
-                                        <rect key="frame" x="20" y="118" width="232" height="43"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Collect makes it easy to organize your screenshots and search in them." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Qn-bZ-GIM">
+                                        <rect key="frame" x="20" y="118" width="335" height="43"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="232" id="S00-C8-252"/>
+                                            <constraint firstAttribute="width" constant="335" id="S00-C8-252"/>
                                             <constraint firstAttribute="height" constant="43" id="huv-RD-KVF"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -748,7 +748,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mEv-bA-iIF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1023" y="37"/>
+            <point key="canvasLocation" x="-1023.2" y="36.431784107946029"/>
         </scene>
     </scenes>
     <resources>
