@@ -24,6 +24,7 @@
 		66AB6D95216494BE009D5446 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AB6D94216494BE009D5446 /* SearchResultsViewController.swift */; };
 		66C1892A2146EACE00110BA0 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C189292146EACE00110BA0 /* SearchViewController.swift */; };
 		66C938C22119DC9B0052250A /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C938C12119DC9B0052250A /* DataModel.swift */; };
+		66D1E0E4219AAA310029D154 /* default.realm in Resources */ = {isa = PBXBuildFile; fileRef = 66D1E0E3219AAA210029D154 /* default.realm */; };
 		66D5D75D2126A23800DD5B4F /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D5D75C2126A23800DD5B4F /* SettingsTableViewController.swift */; };
 		66D5D75F2126A63500DD5B4F /* ManageTagsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D5D75E2126A63500DD5B4F /* ManageTagsTableViewController.swift */; };
 		66DE45AE211DB2EE00702A11 /* ScreenshotCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DE45AD211DB2EE00702A11 /* ScreenshotCell.swift */; };
@@ -450,6 +451,7 @@
 		66AB6D94216494BE009D5446 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		66C189292146EACE00110BA0 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		66C938C12119DC9B0052250A /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		66D1E0E3219AAA210029D154 /* default.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = default.realm; sourceTree = "<group>"; };
 		66D5D75C2126A23800DD5B4F /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		66D5D75E2126A63500DD5B4F /* ManageTagsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTagsTableViewController.swift; sourceTree = "<group>"; };
 		66DE45AD211DB2EE00702A11 /* ScreenshotCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotCell.swift; sourceTree = "<group>"; };
@@ -1154,6 +1156,7 @@
 				6654FEBD2117857400E0D4BA /* LaunchScreen.storyboard */,
 				6617AA3E212F1CA2002DDEE9 /* Data Model */,
 				6654FEBB2117857400E0D4BA /* Assets.xcassets */,
+				66D1E0E3219AAA210029D154 /* default.realm */,
 				6654FEC02117857400E0D4BA /* Info.plist */,
 			);
 			path = Collect;
@@ -1283,6 +1286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6654FEBF2117857400E0D4BA /* LaunchScreen.storyboard in Resources */,
+				66D1E0E4219AAA310029D154 /* default.realm in Resources */,
 				66E6D0342133CE11003D9603 /* TagCell.xib in Resources */,
 				6654FEBC2117857400E0D4BA /* Assets.xcassets in Resources */,
 				6654FEBA2117857000E0D4BA /* Main.storyboard in Resources */,

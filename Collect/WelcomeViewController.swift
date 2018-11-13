@@ -22,6 +22,8 @@ class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDeleg
     var screenshotImageSet: [UIImage?] = []
     @IBOutlet weak var importButton: UIButton!
     
+    lazy var realm = try! Realm()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.importButton.layer.cornerRadius = 25
@@ -76,7 +78,6 @@ class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDeleg
             screenshot.screenshotID = uuid
             screenshot.screenshotFileName = "\(uuid).png"
             screenshot.dateAdded = timeStamp()
-            let realm = try! Realm()
             try! realm.write {
                 realm.add(screenshot)
             }

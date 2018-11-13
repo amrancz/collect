@@ -22,8 +22,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     
     var selectedTags: [String] = []
     
-    let realm = try! Realm()
-    
+    lazy var realm = try! Realm()
+
     var selectedScreenshotsIDs: [String] = []
     var screenshotsToPass: Results<Screenshot>!
 

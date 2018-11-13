@@ -15,7 +15,8 @@ private let reuseIdentifier = "tagCellIdentifier"
 
 class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    let realm = try! Realm()
+    lazy var realm = try! Realm()
+
     var passedScreenshotUUID: String?
     var selectedScreenshot: Results<Screenshot>?
     
@@ -163,7 +164,7 @@ class TagsModalViewController: UIViewController, UICollectionViewDelegate, UICol
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
         }
-        let addTagAction = UIAlertAction(title: "Add tag", style: .default){ (action:UIAlertAction!) in
+        let addTagAction = UIAlertAction(title: "Add Tag", style: .default){ (action:UIAlertAction!) in
             let uuid = UUID().uuidString
             let tag = Tag()
             tag.tagID = uuid

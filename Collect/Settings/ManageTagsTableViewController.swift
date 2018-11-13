@@ -16,8 +16,8 @@ class ManageTagsTableViewController: UITableViewController {
     
     @IBOutlet var tagsTableView: UITableView!
     var tagNames: [String] = []
-    let realm = try! Realm()
-    
+    lazy var realm = try! Realm()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.emptyDataSetDataSource = self
@@ -62,7 +62,7 @@ class ManageTagsTableViewController: UITableViewController {
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction!) in
         }
-        let addTagAction = UIAlertAction(title: "Add tag", style: .default){ (action:UIAlertAction!) in
+        let addTagAction = UIAlertAction(title: "Add Tag", style: .default){ (action:UIAlertAction!) in
             let uuid = UUID().uuidString
             let tag = Tag()
             tag.tagID = uuid
@@ -99,7 +99,6 @@ class ManageTagsTableViewController: UITableViewController {
 //        var cell: UITableViewCell? = tagsTableView.dequeueReusableCell(withIdentifier: "tagTableCell", for: indexPath)
 //        if (cell == nil) {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "tagTableCell")
-        let realm = try! Realm()
         let tags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
         let tagInfo = tags[indexPath.row]
         cell.textLabel?.text = tagInfo.tagName
@@ -149,7 +148,6 @@ class ManageTagsTableViewController: UITableViewController {
         try! self.realm.write {
             self.realm.delete(tag)
             self.realm.refresh()
-            
         }
         tagNames.removeAll()
         self.tableView.deleteRows(at: [indexPath], with: .fade)

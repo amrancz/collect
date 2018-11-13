@@ -25,6 +25,8 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     var screenshotIDSet: [String?] = []
     var screenshotImageSet: [UIImage?] = []
     var passedScreenshots: Results<Screenshot>!
+    
+    lazy var realm = try! Realm()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -148,10 +150,9 @@ class DetailViewController: DetailViewControllerDraggable, UINavigationControlle
     
     @IBAction func deleteScreenshot(_ sender: Any) {
         let deleteAction = UIAlertAction(title: "Delete screenshot", style: .destructive){ (action:UIAlertAction!) in
-            let realm = try! Realm()
-            let screenshot = realm.objects(Screenshot.self).filter("screenshotID = '\(self.passedScreenshotUUID!)'")
-            try! realm.write {
-                realm.delete(screenshot)
+            let screenshot = self.realm.objects(Screenshot.self).filter("screenshotID = '\(self.passedScreenshotUUID!)'")
+            try! self.realm.write {
+                self.realm.delete(screenshot)
             }
             self.screenshotIDSet.remove(at: self.screenshotSlideshow.currentPage)
             NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "reloadCollection"), object: nil))

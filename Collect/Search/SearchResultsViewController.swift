@@ -25,13 +25,14 @@ class SearchResultsViewController: UIViewController, UINavigationControllerDeleg
     var screenshotImage: UIImage!
     var screenshotUUID: String?
     
+    lazy var realm = try! Realm()
+    
     var screenshotPosition: Int?
     var passedScreenshotIDs: [String] = []
     
     var screenshotsToPass: Results<Screenshot>!
     
     func searchedScreenshots() -> Results<Screenshot> {
-        let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false).filter("screenshotID IN %@", passedScreenshotIDs)
         screenshotsToPass = screenshots
         return screenshots

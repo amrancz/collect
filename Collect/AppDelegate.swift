@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-//        // Override point for customization after application launch.
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let initialVC = storyboard.instantiateViewController(withIdentifier:  "HomeViewController")
         let launchedFlag = UserDefaults.standard.bool(forKey: "firstImport")
@@ -23,7 +23,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             UserDefaults.standard.set(true, forKey: "firstImport")
         }
-//        window?.makeKeyAndVisible()
+        
+        let destinationPath = Realm.Configuration.defaultConfiguration.fileURL?.path
+        let bundlePath = Bundle.main.path(forResource: "default", ofType: "realm")
+        let defaultURL = URL(fileURLWithPath: destinationPath!)
+        let pathURL = URL(fileURLWithPath: bundlePath!)
+        
+        if FileManager.default.fileExists(atPath: destinationPath!) {
+            print("File exists")
+        } else {
+            do {
+                try FileManager.default.copyItem(at: pathURL, to: defaultURL)
+            } catch {
+                print(error)
+            }
+        }
         return true
     }
 

@@ -21,8 +21,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     var screenshotPosition: Int?
     var screenshotsToPass: Results<Screenshot>!
     
-    let realm = try! Realm()
-
+    lazy var realm = try! Realm()
     
     func timeStamp() -> String {
         let formatter = DateFormatter()
@@ -70,7 +69,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     func populateScreenshotsToPass() {
-        let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false)
         screenshotsToPass = screenshots
     }
@@ -111,7 +109,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             screenshot.screenshotID = uuid
             screenshot.screenshotFileName = "\(uuid).png"
             screenshot.dateAdded = timeStamp()
-            let realm = try! Realm()
             try! realm.write {
                 realm.add(screenshot)
             }
@@ -138,14 +135,12 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self)
         return screenshots.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt cellForRowAtIndexPath: IndexPath) -> UICollectionViewCell {
         let cell = screenshotCollectionHome.dequeueReusableCell(withReuseIdentifier: "screenshotCell", for: cellForRowAtIndexPath) as! ScreenshotCell
-        let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false)[cellForRowAtIndexPath.row]
         let screenshotURL = getDocumentsDirectory().appendingPathComponent(screenshots.screenshotFileName)
         let screenshotPath = screenshotURL.path
@@ -157,7 +152,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let realm = try! Realm()
         let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false)[indexPath.row]
         screenshotUUID = screenshots.screenshotID
         self.screenshotPosition = indexPath.item
