@@ -36,7 +36,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(timeStamp())
         setStatusBarBackgroundColor(color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         screenshotCollectionHome.delegate = self
         screenshotCollectionHome.dataSource = self
@@ -155,7 +154,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         let screenshots = realm.objects(Screenshot.self).sorted(byKeyPath: "dateAdded", ascending: false)[indexPath.row]
         screenshotUUID = screenshots.screenshotID
         self.screenshotPosition = indexPath.item
-        print(screenshotPosition!)
         performSegue(withIdentifier: "HomeToDetail", sender: indexPath)
     }
     

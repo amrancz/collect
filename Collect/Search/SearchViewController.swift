@@ -20,6 +20,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var searchButtonContainer: UIView!
     
+    @IBOutlet weak var searchButtonBottomConstraint: NSLayoutConstraint!
+    
+    
     var selectedTags: [String] = []
     
     lazy var realm = try! Realm()
@@ -76,6 +79,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         }
         self.searchButton.setTitle("No results", for: .disabled)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -133,9 +139,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         cell.tagCellLabel.text = tagInfo.tagName
         if self.selectedTags.contains(tagInfo.tagName) {
             cell.isSelected = true
+            self.searchTagsCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: UICollectionView.ScrollPosition.top)
         } else {
             cell.isSelected = false
+            self.searchTagsCollectionView.deselectItem(at: indexPath, animated: true)
+
         }
+        self.setupSearchButton()
     }
     
     func widthOfLabel(text:String, font:UIFont) -> CGFloat {
@@ -173,7 +183,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedTag = filteredTags[indexPath.item]
-//        let selectedTag = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)[indexPath.item]
         let screenshots = realm.objects(Screenshot.self).filter("ANY tags == %@", selectedTag)
         for screenshot in screenshots {
             self.selectedScreenshotsIDs.append(screenshot.screenshotID)
@@ -202,14 +211,41 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         if searchText.isEmpty {
             let searchedTags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true)
             filteredTags = searchedTags
-            self.selectedScreenshotsIDs.removeAll()
+//            self.selectedScreenshotsIDs.removeAll()
             self.setupSearchButton()
         } else {
             let searchedTags = realm.objects(Tag.self).sorted(byKeyPath: "tagName", ascending: true).filter("tagName contains[c] %@", searchText)
             filteredTags = searchedTags
         }
         self.searchTagsCollectionView.reloadData()
+        self.setupSearchButton()
     }
+    
+    //MARK: Move search button with keyboard
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo![UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue {
+            let keyboardRect = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRect.height
+            let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+            let bottomSafeArea = (UIApplication.shared.keyWindow?.safeAreaInsets.bottom)!
+            self.searchButtonBottomConstraint.constant = 0 - keyboardHeight + bottomSafeArea
+            UIView.animate(withDuration: animationDuration) {
+                self.view.layoutIfNeeded()
+            }
+        }
+        
+    }
+    
+    @objc func keyboardWillHide(notification: Notification) {
+        self.searchButtonBottomConstraint.constant = 0
+        let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+
+        UIView.animate(withDuration: animationDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     
     //MARK: Perform search
     
