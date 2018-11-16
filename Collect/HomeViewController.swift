@@ -10,7 +10,6 @@ import UIKit
 import Foundation
 import Realm
 import RealmSwift
-import BSImagePicker
 import Photos
 import TBEmptyDataSet
 import TLPhotoPicker
@@ -60,11 +59,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     func setStatusBarBackgroundColor(color: UIColor) {
         guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
         statusBar.backgroundColor = color
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func populateScreenshotsToPass() {

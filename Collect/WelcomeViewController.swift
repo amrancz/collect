@@ -11,7 +11,6 @@ import UIKit
 import Realm
 import RealmSwift
 import Photos
-import BSImagePicker
 import TLPhotoPicker
 
 class WelcomeViewController: UIViewController, TLPhotosPickerViewControllerDelegate {
