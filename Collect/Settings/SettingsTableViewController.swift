@@ -20,7 +20,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
         if MFMailComposeViewController.canSendMail() {
             let email = MFMailComposeViewController()
             email.mailComposeDelegate = self
-            email.setToRecipients(["collect.app@gmail.com"])
+            email.setToRecipients(["adam@amran.cz"])
             email.setSubject("Collect App: Feedback")
             present(email, animated: true)
         } else {
