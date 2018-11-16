@@ -2,8 +2,8 @@
 //  SearchViewController.swift
 //  Collect
 //
-//  Created by Adam Amran on 10/09/2018.
-//  Copyright © 2018 Adam Amran. All rights reserved.
+//  Created by Adham Amran on 10/09/2018.
+//  Copyright © 2018 Adham Amran. All rights reserved.
 //
 
 import Foundation
